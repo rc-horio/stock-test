@@ -352,6 +352,7 @@ select {
 /* =========================================
    モーダル
 ========================================= */
+
 #sharedModal,
 #tlModal,
 #transitionModal {
@@ -758,9 +759,4 @@ select {
         font-size: 0.8rem;
         padding: 5px 10px;
     }
-}
-
-/* ========== モーダル表示中は背景スクロール固定 ========== */
-body.modal-open {
-    overflow: hidden;
 }

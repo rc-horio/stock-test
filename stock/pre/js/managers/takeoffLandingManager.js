@@ -1,6 +1,4 @@
-// takeoffLandingManager.js
-import { createDividerPlus } from "./motifManager.js";
-import { loadCSV, parseCSV } from "../shared/util.js"; // ★ 追加
+import { loadCSV, parseCSV } from "../shared/util.js";
 
 /* -------------------- 定数 -------------------- */
 const TYPES = {

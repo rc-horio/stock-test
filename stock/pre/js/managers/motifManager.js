@@ -1,10 +1,8 @@
-// motifManager.js – モチーフ一覧とフッター管理 (swap 対応版)
-// -------------------------------------------------------------------
 import { openTransitionModal } from "./transitionManager.js";
 import { openSharedModal } from "../shared/sharedModal.js";
 
-let footerItemRef = null; // フッター DOM
-let internalMotifData = []; // CSV パース結果
+let footerItemRef = null;
+let internalMotifData = [];
 
 /* ================================================================
    フッターにドラッグ＆ドロップ（Swap）を設定
@@ -17,13 +15,13 @@ export function setFooterItem(el) {
     filter:
       ".footerItemClose, .landingPlaceholder, .takeoffPlaceholder, .plusBtn",
 
-    dragClass: "draggingIcon", // CSS で透明度など指定
+    dragClass: "draggingIcon",
     ghostClass: "ghostIcon",
-    swap: true, // ← 追加
-    swapClass: "swapCandidate", // （お好み。後述の CSS で枠線出し）
+    swap: true,
+    swapClass: "swapCandidate",
 
-    forceFallback: false, // swap が自動で並べ替えを抑制するので不要
-    animation: 150, // 多少つけても OK（見た目だけ）
+    forceFallback: false,
+    animation: 150,
 
     /* ----- ドロップ可否 / ハイライト ----- */
     onMove(evt) {
@@ -41,7 +39,7 @@ export function setFooterItem(el) {
 
     /* ----- ドロップ確定 ----- */
     onEnd(evt) {
-      rebuildPlusButtons(); // “＋” を再配置
+      rebuildPlusButtons();
     },
   });
 }
@@ -60,22 +58,6 @@ function highlight(target, ok) {
 function clearHighlight() {
   if (lastHighlight) lastHighlight.classList.remove("dropTarget");
   lastHighlight = null;
-}
-
-/* ========================= Swap ヘルパ ======================== */
-function swapNodes(a, b) {
-  const aNext = a.nextSibling;
-  const bNext = b.nextSibling;
-  const parent = a.parentNode;
-
-  if (aNext === b) {
-    parent.insertBefore(b, a);
-  } else if (bNext === a) {
-    parent.insertBefore(a, b);
-  } else {
-    parent.insertBefore(a, bNext);
-    parent.insertBefore(b, aNext);
-  }
 }
 
 /* ================================================================
@@ -125,7 +107,6 @@ export function buildMotifList(csvArray, container) {
     };
 
     img.onerror = () => {
-      // 画像が存在しない場合はスキップ（何もしない）
       console.warn(`画像が見つかりません: ${imgPath}`);
     };
   });
@@ -221,7 +202,7 @@ function rebuildPlusButtons() {
 function restoreMTMOrder() {
   if (!footerItemRef) return;
 
-  // 1) いま並んでいるアイコンを取得（landing はそのまま）
+  // 1) いま並んでいるアイコンを取得
   const originals = Array.from(
     footerItemRef.querySelectorAll(
       ".motifIcon, .transitionIconWrapper, .landingPlaceholder"
@@ -243,10 +224,10 @@ function restoreMTMOrder() {
     if (motifs.length) ordered.push(motifs.shift());
     if (transitions.length) ordered.push(transitions.shift());
   }
-  if (landing) ordered.push(landing); // landing は最後に固定
+  if (landing) ordered.push(landing);
 
   // 4) DocumentFragment にまとめて差し替え
   const frag = document.createDocumentFragment();
   ordered.forEach((n) => frag.appendChild(n));
-  footerItemRef.appendChild(frag); // これで一括置換完了
+  footerItemRef.appendChild(frag);
 }

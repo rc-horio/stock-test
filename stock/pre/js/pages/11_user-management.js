@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "index.html";
   });
 
-  // （以下は必要に応じて追加）
   document.getElementById("addUserBtn")?.addEventListener("click", () => {
     alert("ユーザー追加（未実装）");
   });

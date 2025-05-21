@@ -1,5 +1,3 @@
-// pdfExporter.js – 完全フロントエンド版
-// jsPDF 3.x + html2canvas 1.4.x を前提
 export class PDFExporter {
   constructor(containerSelector) {
     this.container = document.querySelector(containerSelector);
@@ -7,7 +5,7 @@ export class PDFExporter {
   }
 
   async export() {
-    await document.fonts.ready; // フォント読み込み待ち
+    await document.fonts.ready;
 
     /* ========= 1) 画像データ収集 ========== */
     const imgs = [...this.container.querySelectorAll("img")];
@@ -67,9 +65,8 @@ export class PDFExporter {
       </div>
     `);
 
-        i++; // 次のループで next をスキップ
+        i++;
       } else if (i === imgs.length - 1) {
-        // 最後が1個だけ余ったら単独表示
         blocks.push(`<div class="row">${block}</div>`);
       }
     }
@@ -109,10 +106,8 @@ export class PDFExporter {
       const imgH = (canvas.height * imgW) / canvas.width;
 
       if (imgH <= pageH) {
-        // 1ページで収まる
         pdf.addImage(imgData, "JPEG", 0, 0, imgW, imgH);
       } else {
-        // 複数ページ用：切り出し用の高さを正しく制御
         let y = 0;
         while (y < imgH) {
           pdf.addImage(imgData, "JPEG", 0, -y, imgW, imgH);

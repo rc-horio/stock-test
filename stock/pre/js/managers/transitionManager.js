@@ -3,7 +3,6 @@ import { createDividerPlus,adjustPlusButtons } from "./motifManager.js";
 /* -----------------------------  データ保持  ----------------------------- */
 let transitionList = [];
 
-/* 外部から CSV を受け取って整形 */
 export function setTransitionData(csvArray) {
   const [, ...rows] = csvArray;
   transitionList = rows
@@ -19,11 +18,9 @@ export const getTransitionData = () => transitionList;
 //  他パネルをまとめて閉じるユーティリティ
 // ──────────────────────────────────────────────
 function closeExistingPanels() {
-  // TL パネル
   const tlMask = document.getElementById("tlModalMask");
   if (tlMask && !tlMask.classList.contains("hidden")) tlMask.click();
 
-  // 共有モーダル（モチーフ詳細）
   const sharedMask = document.getElementById("sharedModalMask");
   if (sharedMask && !sharedMask.classList.contains("hidden"))
     sharedMask.click();
@@ -37,13 +34,11 @@ export function openTransitionModal(targetPlusDiv) {
   closeExistingPanels();
   if (!transitionList.length) return;
 
-  /* ――― DOM 参照 ――― */
   const mask = document.getElementById("transitionModalMask");
   const modal = document.getElementById("transitionModal");
   const grid = document.getElementById("transitionGrid");
   const closeX = document.getElementById("transitionModalClose");
 
-  /* 以前の中身をリセット */
   grid.innerHTML = "";
 
   /* プレビューカードを 10 個生成 (それ以上でも自動で並ぶ) */
@@ -70,7 +65,6 @@ export function openTransitionModal(targetPlusDiv) {
     modal.classList.add("hidden");
     mask.classList.add("hidden");
 
-    /* すべての video 停止 */
     grid.querySelectorAll("video").forEach((v) => {
       v.pause();
       v.currentTime = 0;
@@ -78,7 +72,6 @@ export function openTransitionModal(targetPlusDiv) {
     document.removeEventListener("click", outsideWatcher);
   };
   mask.onclick = (e) => {
-    // ← 置き換え
     e.stopPropagation();
     e.preventDefault();
     closePanel();
@@ -88,19 +81,17 @@ export function openTransitionModal(targetPlusDiv) {
   /* ----- モーダル外クリックで閉じる (mask が無い領域もカバー) ----- */
   const outsideWatcher = (e) => {
     if (!modal.contains(e.target) && !mask.contains(e.target)) {
-      e.stopPropagation(); // ← 追加
-      e.preventDefault(); // ← 追加
+      e.stopPropagation();
+      e.preventDefault();
       closePanel();
     }
   };
 
   setTimeout(() => document.addEventListener("click", outsideWatcher));
 
-  /* 表示 */
   modal.classList.remove("hidden");
   mask.classList.remove("hidden");
 
-  /* すべてオートプレイ（Safari 対策として明示呼び出し） */
   grid.querySelectorAll("video").forEach((v) => v.play().catch(() => {}));
 }
 
@@ -108,7 +99,6 @@ export function openTransitionModal(targetPlusDiv) {
  * + ボタンをトランジションアイコンに置換
  */
 export function replacePlusWithTransition(oldPlusDiv, fileName) {
-  // ---- 新しいラッパーを生成 ----
   const wrapper = document.createElement("div");
   wrapper.className = "footerIcon transitionIconWrapper";
   wrapper.innerHTML = `
@@ -119,7 +109,6 @@ export function replacePlusWithTransition(oldPlusDiv, fileName) {
         <div class="footerItemClose transitionCancel">Cancel</div>
     `;
 
-  // ---- まるごと差し替え ----
   oldPlusDiv.replaceWith(wrapper);
   adjustPlusButtons();
 }

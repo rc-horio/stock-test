@@ -8,12 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // ✅ ユーザー管理ボタンで遷移
   document.getElementById("userManageBtn").addEventListener("click", () => {
     window.location.href = "11_user-management.html";
   });
 
-  // 他ボタン（仮）
   document.getElementById("logBtn").addEventListener("click", () => {
     alert("ログ画面へ（未実装）");
   });

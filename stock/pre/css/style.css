@@ -210,24 +210,42 @@ a {
 
 #headBotom {
     display: flex;
+    align-items: center;
+    /* ← 高さ中央に揃える */
     color: #fff;
     border-top: 2px solid #3c3c3c;
     border-bottom: 2px solid #3c3c3c;
     padding: 10px 10px;
     padding-left: 20px;
     margin: 0 20px 40px;
+    gap: 20px;
+    /* 要素間の余白を明示 */
 }
 
 #hb_title {
-    padding-right: 20px;
+    padding: 0;
+    margin: 0;
+    font-size: 1rem;
+    /* 必要に応じて調整 */
+    line-height: 1;
 }
 
+
+/* 共通selectスタイル（グローバルにしても可） */
 select {
-    background: #000;
+    appearance: none;
+    /* OS標準スタイルを無効化 */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background: #1d1d1d url("data:image/svg+xml,%3Csvg fill='%23ccc' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 0.7em center/1em auto;
     color: #fff;
     border: 1px solid #525252;
-    outline: none;
+    padding: 0.5em 2.5em 0.5em 1em;
+    font-size: 1rem;
+    border-radius: 4px;
     cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 #lebtn {

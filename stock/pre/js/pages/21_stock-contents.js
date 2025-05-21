@@ -61,27 +61,45 @@ function showMainUI() {
 // 機体数フィルタの設定
 // --------------------
 function setupPlaneFilter() {
+  const allClasses = Array.from({ length: 10 }, (_, i) => `m_${(i + 1) * 100}`);
+
+  // valueに応じて非表示にするクラスを定義
+  const classMap = {
+    "0100": allClasses.filter((cls) => cls !== "m_100"),
+    "0200": allClasses.filter((cls) => cls !== "m_200"),
+    "0300": allClasses.filter((cls) => cls !== "m_300"),
+    "0400": allClasses.filter((cls) => cls !== "m_400"),
+    "0500": allClasses.filter((cls) => cls !== "m_500"),
+    "0600": allClasses.filter((cls) => cls !== "m_600"),
+    "0700": allClasses.filter((cls) => cls !== "m_700"),
+    "0800": allClasses.filter((cls) => cls !== "m_800"),
+    "0900": allClasses.filter((cls) => cls !== "m_900"),
+    1000: allClasses.filter((cls) => cls !== "m_1000"),
+  };
+
+  const showAll = () => {
+    allClasses.forEach((cls) => {
+      Array.from(document.getElementsByClassName(cls)).forEach((el) =>
+        el.removeAttribute("id")
+      );
+    });
+  };
+
+  const hide = (classNames) => {
+    classNames.forEach((cls) => {
+      Array.from(document.getElementsByClassName(cls)).forEach((el) =>
+        el.setAttribute("id", "m_none")
+      );
+    });
+  };
+
+  const select = document.getElementById("select");
+
   select.addEventListener("change", () => {
     const val = select.value;
-    const m100 = document.getElementsByClassName("m_100");
-    const m300 = document.getElementsByClassName("m_300");
-    const m500 = document.getElementsByClassName("m_500");
-
-    const showAll = () =>
-      [...m100, ...m300, ...m500].forEach((el) => el.removeAttribute("id"));
-    const hide = (els) =>
-      Array.from(els).forEach((el) => el.setAttribute("id", "m_none"));
-
     showAll();
-    if (val === "0100") {
-      hide(m300);
-      hide(m500);
-    } else if (val === "0300") {
-      hide(m100);
-      hide(m500);
-    } else if (val === "0500") {
-      hide(m100);
-      hide(m300);
+    if (classMap[val]) {
+      hide(classMap[val]);
     }
   });
 }

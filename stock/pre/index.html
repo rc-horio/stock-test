@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ログイン</title>
+    <link rel="shortcut icon" href="./favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+    <!-- ヘッダー（ロゴ＋サブタイトル） -->
+    <header>
+        <div id="headTop">
+            <img class="headpos" id="redcliffLogo" src="./assets/image/logo/REDCLIFF_web1.png" alt="Redcliffロゴ" />
+            <div class="headpos" id="subtitle">ログイン</div>
+        </div>
+    </header>
+
+    <!-- ログインフォーム -->
+    <div id="loginWrapper">
+        <form id="loginForm">
+            <h2>ログイン</h2>
+            <input name="username" placeholder=" ユーザー名" required />
+            <input name="password" type="password" placeholder=" パスワード" required />
+            <p id="loginError" class="loginError"></p>
+            <button type="submit">Sign in</button>
+        </form>
+    </div>
+
+    <script type="module" src="./js/pages/login.js"></script>
+</body>
+
+</html>

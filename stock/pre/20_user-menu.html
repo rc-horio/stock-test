@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ユーザーメニュー</title>
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+    <!-- ヘッダー（他画面と統一） -->
+    <header>
+        <div id="headTop">
+            <button id="logoutBtn" class="logout-btn">ログアウト</button>
+            <img class="headpos" id="redcliffLogo" src="./assets/image/logo/REDCLIFF_web1.png" alt="Redcliffロゴ" />
+            <div class="headpos" id="subtitle">メニュー</div>
+        </div>
+    </header>
+
+    <!-- メイン -->
+    <main class="menuMain">
+        <div class="menuWrapper">
+            <p class="menuDescription">ご利用いただけるメニュー：</p>
+            <div id="userMenuContainer">
+                <button id="stockContentsBtn">ストックコンテンツを見る</button>
+                <button disabled>Coming Soon</button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="./js/pages/20_user-menu.js"></script>
+</body>
+
+</html>

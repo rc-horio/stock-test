@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href=" ./favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/plugins/SortableSwapPlugin.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.3/dist/purify.min.js"></script>
+</head>
+
+<!-- ヘッダー -->
+<header>
+    <div id="headTop">
+        <button id="backToMenuBtn" class="back-btn">メニューに戻る</button>
+        <button id="logoutBtn" class="logout-btn">ログアウト</button>
+        <img class="headpos" id="redcliffLogo" src="./assets/image/logo/REDCLIFF_web1.png" alt="" />
+        <div class="headpos" id="subtitle">ストックコンテンツ</div>
+    </div>
+    <div id="headBotom">
+        <div id="hb_title">機体数</div>
+        <select name="sample" id="select">
+            <option value="0000">All</option>
+            <option value="0100">100機</option>
+            <option value="0300">300機</option>
+            <option value="0500">500機</option>
+        </select>
+        <button id="lebtn" class="imgHover" type="button" onclick="requestUrl()">リクエスト
+        </button>
+    </div>
+</header>
+
+<!-- メインコンテンツ -->
+<div class="mainArray">
+    <div id="setGrid">
+        <div id="color_list"></div>
+    </div>
+</div>
+
+<!-- 共通モーダル -->
+<div id="sharedModalMask" class="hidden"></div>
+<section id="sharedModal" class="hidden">
+    <div class="sharedModalHeader">
+        <div id="sharedModalClose">&times;</div>
+    </div>
+
+    <div class="sharedModalBody">
+        <!-- 切り替え可能なセクション: select, video, info -->
+        <div id="sharedModalSelectWrapper" class="hidden">
+            <select id="sharedModalSelect"></select>
+        </div>
+
+        <div class="sharedVideoContainer">
+            <video id="sharedVideo" autoplay muted loop>
+                <source src="" type="video/mp4" id="sharedVideoSource" />
+            </video>
+            <div id="sharedComment"></div>
+        </div>
+
+        <div id="sharedInfoText"></div>
+    </div>
+
+    <div class="sharedModalFooter">
+        <div id="sharedModalInput">input</div>
+    </div>
+</section>
+
+<!-- トランジション選択モーダル -->
+<div id="transitionModalMask" class="hidden"></div>
+<section id="transitionModal" class="hidden">
+    <div class="transitionModalHeader">
+        <div id="transitionModalClose">&times;</div>
+    </div>
+
+    <h3 class="transitionModalHeading">トランジションを選択してください</h3>
+
+    <div id="transitionGrid" class="transitionModalBody">
+        <!-- トランジションカードがここに入る -->
+    </div>
+</section>
+
+<!-- ★★ TL（離陸／着陸）選択モーダル -->
+<div id="tlModalMask" class="hidden"></div>
+<section id="tlModal" class="hidden">
+    <div class="transitionModalHeader">
+        <div id="tlModalClose">&times;</div>
+    </div>
+
+    <h3 id="tlModalHeading" style="color:#fff;text-align:center;margin:6px 0;"></h3>
+
+    <div id="tlGrid" class="tlModalBody">
+        <!-- 自動で3枚のカードが入る -->
+    </div>
+</section>
+
+<!-- フッター -->
+<div id="footerPanel">
+    <div id="footertitle">
+        <div>追加モチーフ</div>
+        <div id="PDFoutput">-PDF書き出し-</div>
+    </div>
+    <div id="footerItem"></div>
+</div>
+
+<!-- スクリプト -->
+<script type="module" src="./js/\\/pages/21_stock-contents.js"></script>
+<!-- ========= PDF 用テンプレート ========= -->
+<script type="text/template" id="pdf-template">
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>{{title}}</title>
+  <style>
+    *{box-sizing:border-box}body{font-family:"Zen Kaku Gothic New",sans-serif;margin:0;
+    padding:28px 40px 20px;background:#000;color:#f0f0f0;position:relative}
+    h1{margin:0 0 24px;font-size:28px;color:#fff;border-bottom:2px solid #444;padding-bottom:8px}
+    .logo{position:absolute;top:16px;right:24px;width:120px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:auto;gap:28px;break-inside:avoid}
+    .unit{display:flex;align-items:flex-start;gap:16px;padding:12px;border-radius:8px}
+    .arrow{font-size:36px;line-height:120px;color:#aaa}
+    .motif-img,.transition-img{border-radius:4px;border:1px solid #666;box-shadow:0 0 8px rgba(255,255,255,.1);background:#111}
+    .motif-img{width:170px}.transition-img{width:140px}
+    .caption{margin-top:6px;text-align:left;line-height:1.5;font-size:12px;color:#ddd}
+  </style>
+</head>
+<body>
+  <img class="logo" src="./assets/image/logo/REDCLIFF_web1.png">
+  <h1>{{title}}</h1>
+  <div class="grid">{{contentBlocks}}</div>
+</body>
+</html>
+</script>
+</body>
+
+</html>

@@ -1,0 +1,767 @@
+/* =========================================
+   全体リセット & ベーススタイル
+========================================= */
+body {
+    font-family: 'Zen Kaku Gothic New', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+}
+
+img {
+    vertical-align: bottom;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 完全非表示にするための .hidden クラス */
+.hidden {
+    display: none !important;
+}
+
+#headerButtons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+}
+
+/* =========================================
+   ログインフォーム専用スタイル
+========================================= */
+#loginWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 150px);
+    margin-top: 30px;
+}
+
+#loginWrapper form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    /* 適度な間隔に調整 */
+    width: 300px;
+    padding: 2rem;
+}
+
+#loginWrapper h2 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin: 0;
+    text-align: center;
+}
+
+#loginWrapper input {
+    padding: 0.6rem;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background: #222;
+    color: #fff;
+    font-size: 1rem;
+}
+
+#loginWrapper #loginError {
+    height: 1.4em;
+    visibility: hidden;
+    color: #f66;
+    font-size: 0.85rem;
+    margin: 0;
+    line-height: 1.4;
+    white-space: nowrap;
+    text-align: center;
+}
+
+#loginWrapper #loginError.show {
+    visibility: visible;
+}
+
+#loginWrapper button {
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    background: #e00;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* ログインエラー表示の統一 */
+.loginError {
+    height: 1.4em;
+    visibility: hidden;
+    color: #f66;
+    font-size: 0.85rem;
+    margin: 0;
+    line-height: 1.4;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.loginError.show {
+    visibility: visible;
+}
+
+
+/* =========================================
+   メニュー画面
+========================================= */
+.menuMain {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+}
+
+#adminMenuContainer button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #1d1d1d;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin: 10px;
+}
+
+#adminMenuContainer button:hover:enabled {
+    background-color: #444;
+}
+
+#userMenuContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+#userMenuContainer button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #1d1d1d;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#userMenuContainer button:hover:enabled {
+    background-color: #444;
+}
+
+#userMenuContainer button:disabled {
+    background-color: #555;
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   ユーザー管理画面
+========================================= */
+#userManagementContainer button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    background-color: #1d1d1d;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin: 10px;
+}
+
+#userManagementContainer button:hover:enabled {
+    background-color: #444;
+}
+
+/* =========================================
+   ヘッダー部分
+========================================= */
+#headTop {
+    position: relative;
+    height: 150px;
+    margin-top: 30px;
+    padding-left: 50px;
+}
+
+#redcliffLogo {
+    height: 50%;
+    margin: auto;
+    margin-right: 20px;
+}
+
+#subtitle {
+    color: #fff;
+    font-size: 20px;
+    margin: auto auto 20px 0;
+    margin-top: 15px;
+    border-bottom: 1px solid;
+    padding: 10px 10px;
+    margin: 0 40px 0px 0px;
+}
+
+#headBotom {
+    display: flex;
+    color: #fff;
+    border-top: 2px solid #3c3c3c;
+    border-bottom: 2px solid #3c3c3c;
+    padding: 10px 10px;
+    padding-left: 20px;
+    margin: 0 20px 40px;
+}
+
+#hb_title {
+    padding-right: 20px;
+}
+
+select {
+    background: #000;
+    color: #fff;
+    border: 1px solid #525252;
+    outline: none;
+    cursor: pointer;
+}
+
+#lebtn {
+    margin-left: 50px;
+    background: #1d1d1d;
+    color: #fff;
+    border: 1px solid #525252;
+    cursor: pointer;
+}
+
+/* Hover エフェクト */
+.imgHover:hover,
+#lebtn:hover {
+    opacity: 0.5;
+    transition-duration: 0.4s;
+}
+
+
+/* =========================================
+   メインコンテンツ
+========================================= */
+.mainArray {
+    margin-bottom: 30%;
+}
+
+/* ===== メディアクエリ: スマホ (max-width:767px) ===== */
+@media (max-width: 767px) {
+    #setGrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-column-gap: 0;
+        margin: 0 20px;
+    }
+}
+
+/* ===== メディアクエリ: タブレット (min-width:767px) ===== */
+@media (min-width: 767px) {
+    #setGrid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-column-gap: 0;
+        margin: 0 20px;
+    }
+}
+
+/* ===== メディアクエリ: 大画面 (min-width:1800px) ===== */
+@media (min-width: 1800px) {
+    #setGrid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-column-gap: 0;
+        margin: 0 20px;
+    }
+}
+
+/* モチーフの画像ボックス */
+.box-img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+}
+
+.box-img img {
+    width: 100%;
+    height: auto;
+}
+
+/* .box-img {
+    position: relative;
+    cursor: pointer;
+    width: 320px;
+    height: 320px;
+}
+
+.box-img img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(.3);
+    width: auto;
+    height: auto;
+    max-width: none;
+} */
+
+
+/* 各モチーフ下の説明テキスト */
+.box-img p {
+    color: #fff;
+    font-size: 1vw;
+    width: 99%;
+    height: 4vw;
+    line-height: 4vw;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* フィルタリングで非表示にするクラス */
+#m_none {
+    display: none;
+}
+
+/* =========================================
+   アニメーション
+========================================= */
+@keyframes colorOnly-hover {
+    100% {
+        color: rgb(255, 165, 165);
+    }
+}
+
+@keyframes colorAndBorder-hover {
+    100% {
+        color: rgb(255, 165, 165);
+        border: 1px solid rgb(255, 165, 165);
+    }
+}
+
+/* =========================================
+   モーダル
+========================================= */
+#sharedModal,
+#tlModal,
+#transitionModal {
+    position: fixed;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -25%);
+    background: #000;
+    border-radius: 4px;
+    z-index: 999;
+}
+
+/* 共通モーダル 個別サイズ */
+#sharedModal {
+    width: 85%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* トランジションモーダル 個別サイズ */
+#transitionModal {
+    width: 95%;
+    max-width: 1200px;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 離発着モーダル 個別サイズ */
+#tlModal {
+    width: 95%;
+    max-width: 1000px;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 14px 18px;
+}
+
+/* マスク */
+#sharedModalMask,
+#tlModalMask,
+#transitionModalMask {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+}
+
+/* モーダル上部バー */
+.sharedModalHeader,
+.transitionModalHeader {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+#sharedModalClose,
+#transitionModalClose {
+    cursor: pointer;
+    color: #fff;
+    font-size: clamp(14px, 2vw, 18px);
+}
+
+#sharedModalClose:hover,
+#transitionModalClose:hover {
+    animation: colorOnly-hover 0.5s both;
+}
+
+/* 共通モーダル Body */
+.sharedModalBody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    flex: 1;
+}
+
+#sharedModalSelectWrapper select {
+    width: 80%;
+    margin-bottom: 10px;
+    background: #000;
+    color: #fff;
+    border: 1px solid #525252;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.sharedVideoContainer {
+    width: 90%;
+    max-height: 65vh;
+}
+
+.sharedVideoContainer video {
+    width: 100%;
+    border: 0.2vw solid #1d1d1d;
+    border-radius: 0.6vw;
+}
+
+#sharedComment,
+#sharedInfoText {
+    margin-top: 8px;
+    color: #fff;
+    font-size: clamp(12px, 2vw, 16px);
+    text-align: center;
+}
+
+.sharedModalFooter {
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 12px 10px 15px;
+}
+
+#sharedModalInput {
+    background: transparent;
+    color: #fff;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: clamp(12px, 1.6vw, 15px);
+    cursor: pointer;
+}
+
+#sharedModalInput:hover {
+    animation: colorAndBorder-hover 0.5s both;
+}
+
+/* トランジションモーダル Body */
+.transitionModalBody {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    padding: 12px 16px 24px;
+}
+
+.transitionModalHeading {
+    width: 100%;
+    margin: 0 auto 6px;
+    color: #fff;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.transCard video {
+    width: 100%;
+    border: 2px solid #1d1d1d;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.transCard video:hover {
+    border-color: #ffa55a;
+}
+
+/* 離発着モーダル Body */
+.tlModalBody {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    padding: 8px;
+    flex-wrap: wrap;
+}
+
+.tlCard {
+    width: 100%;
+    max-width: 300px;
+}
+
+.tlCard video {
+    width: 100%;
+    height: auto;
+    border: 2px solid #1d1d1d;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.tlCard video:hover {
+    border-color: #ffa55a;
+}
+
+/* =========================================
+   フッター
+========================================= */
+:root {
+    /* 共通サイズ: 80–110px を可変 */
+    --footer-unit-size: clamp(80px, 9vw, 110px);
+}
+
+#footerPanel {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(56, 56, 56, 0.144);
+    backdrop-filter: blur(12px);
+    z-index: 50;
+}
+
+#footertitle {
+    display: flex;
+    color: rgba(255, 255, 255, 0.849);
+    padding: 10px 0 8px 25px;
+}
+
+#footerItem {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 0 0 12px 25px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+}
+
+.footerIcon {
+    flex: 0 0 var(--footer-unit-size);
+    /* 等幅・縮まない */
+    height: var(--footer-unit-size);
+    margin: 0;
+    /* 個別 margin は除去 */
+    position: relative;
+    /* 枠線の基準 */
+    box-sizing: border-box;
+    /* 枠線を内側計算 */
+    display: inline-block;
+    width: 100px;
+    background-color: transparent;
+    margin-left: 0;
+    /* ✅ 左寄りになる原因を除去 */
+}
+
+.footerIcon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* アスペクト維持してトリミング */
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#footerItem::-webkit-scrollbar {
+    height: 6px;
+}
+
+#footerItem::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#footerItem::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 3px;
+}
+
+#footerItem:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.transitionIconWrapper img {
+    cursor: pointer;
+}
+
+.container {
+    width: 100%;
+    height: auto;
+}
+
+#PDFoutput {
+    margin: 4px 0 0 30px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+#PDFoutput:hover {
+    animation: colorOnly-hover 0.5s both;
+}
+
+.plusBtn {
+    flex: 0 0 var(--footer-unit-size);
+    height: var(--footer-unit-size);
+    font-size: calc(var(--footer-unit-size) * 0.5);
+    margin: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #aaa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: color 0.2s ease;
+    cursor: pointer;
+}
+
+.plusBtn:hover {
+    color: #8ab4ff;
+}
+
+.footerItemClose {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6px;
+    font-size: 15px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.footerItemClose:hover {
+    animation: colorOnly-hover 0.5s both;
+}
+
+.draggingIcon {
+    opacity: 0.45 !important;
+}
+
+.ghostIcon {
+    opacity: 0.25 !important;
+}
+
+.dropTarget,
+.swapCandidate {
+    outline: 3px solid #8ab4ff;
+    outline-offset: -3px;
+    border-radius: 6px;
+}
+
+/* 離発着 */
+.tlPlaceholder .tlBox {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #575757;
+    border-radius: 6px;
+    color: #bbb;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.takeoffPlaceholder {
+    margin-right: 30px;
+}
+
+.tlPlaceholder:hover .tlBox {
+    border-color: #ffa55a;
+    color: #ffa55a;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+
+/* =========================================
+   ログアウトボタン
+========================================= */
+#logoutBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+
+#backToMenuBtn {
+    position: absolute;
+    top: 10px;
+    right: 120px;
+    z-index: 1000;
+}
+
+.logout-btn,
+.back-btn {
+    background: transparent;
+    color: #ccc;
+    border: 1px solid #555;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.logout-btn:hover,
+.back-btn:hover {
+    background: #333;
+    color: #fff;
+    border-color: #777;
+}
+
+@media (max-width: 600px) {
+
+    .logout-btn,
+    .back-btn {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+    }
+}
+
+/* ========== モーダル表示中は背景スクロール固定 ========== */
+body.modal-open {
+    overflow: hidden;
+}

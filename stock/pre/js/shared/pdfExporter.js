@@ -1,20 +1,51 @@
 export class PDFExporter {
   constructor(containerSelector) {
     this.container = document.querySelector(containerSelector);
-    this.template = document.getElementById("pdf-template").textContent;
+    this.template = null; // 初期は null
+  }
+
+  async loadTemplate() {
+    if (this.template) return this.template; // キャッシュ
+    const res = await fetch("./22_pdf-preview.html");
+    const text = await res.text();
+
+    // テンプレートだけ抽出（script タグ内の content）
+    const match = text.match(
+      /<script[^>]*id="pdf-template-v2"[^>]*>([\s\S]*?)<\/script>/i
+    );
+    if (!match) throw new Error("テンプレートが見つかりません");
+
+    this.template = match[1]; // innerHTML（textContentに相当）
+    return this.template;
   }
 
   async export() {
     await document.fonts.ready;
+    const template = await this.loadTemplate(); // ← テンプレート読み込み
 
-    /* ========= 1) 画像データ収集 ========== */
+    let takeoffTitle = "";
+    let landingTitle = "";
+    
     const imgs = [...this.container.querySelectorAll("img")];
     if (!imgs.length) {
       alert("フッターに画像がありません。");
       return;
     }
 
-    const blocks = [];
+    // 画像リストを先にスキャンして、離陸／着陸タイトルだけ拾っておく
+    for (const img of imgs) {
+      if (img.dataset.type === "takeoff") {
+        takeoffTitle = img.dataset.filename || "";
+      }
+      if (img.dataset.type === "landing") {
+        landingTitle = img.dataset.filename || "";
+      }
+    }
+
+    // タイトルがあれば「離陸／着陸 + スペース + タイトル」、なければ「離陸／着陸」のみ
+    const takeoffLabel = "離陸" + (takeoffTitle ? `　${takeoffTitle}` : "");
+    const landingLabel = "着陸" + (landingTitle ? `　${landingTitle}` : "");
+
     const labelMap = {
       motif: "モチーフ",
       transition: "トランジション",
@@ -22,59 +53,58 @@ export class PDFExporter {
       landing: "着陸",
     };
 
+    const entries = [];
+    let motifIndex = 0;
+
     for (let i = 0; i < imgs.length; i++) {
       const img = imgs[i];
-      const dataURL = await this.#imgToDataURL(img);
-      const typeClass =
-        img.dataset.type === "transition" ? "transition-img" : "motif-img";
 
-      const block = `
-    <div class="unit">
-      <img src="${dataURL}" class="${typeClass}">
-      <div class="caption">
-        <div>${labelMap[img.dataset.type] ?? img.dataset.type}</div>
-        <div>${img.dataset.filename}</div>
-      </div>
-    </div>
-  `;
-
-      if (i % 2 === 0 && i < imgs.length - 1) {
-        // 奇数・偶数ペアでセット（アイコン→矢印→アイコン）
-        const nextImg = imgs[i + 1];
-        const nextDataURL = await this.#imgToDataURL(nextImg);
-        const nextTypeClass =
-          nextImg.dataset.type === "transition"
-            ? "transition-img"
-            : "motif-img";
-
-        const nextBlock = `
-      <div class="unit">
-        <img src="${nextDataURL}" class="${nextTypeClass}">
-        <div class="caption">
-          <div>${labelMap[nextImg.dataset.type] ?? nextImg.dataset.type}</div>
-          <div>${nextImg.dataset.filename}</div>
-        </div>
-      </div>
-    `;
-
-        blocks.push(`
-      <div class="row">
-        ${block}
-        <div class="arrow">→</div>
-        ${nextBlock}
-      </div>
-    `);
-
-        i++;
-      } else if (i === imgs.length - 1) {
-        blocks.push(`<div class="row">${block}</div>`);
+      /* ─── モチーフではない場合は読み飛ばし ─── */
+      if (img.dataset.type === "takeoff" || img.dataset.type === "landing") {
+        continue;
       }
+
+      /* ─── モチーフ ─── */
+      motifIndex++;
+      const dataURL = await this.#imgToDataURL(img);
+
+      /* 直後にトランジションがあれば取り込み、ループを 1 つ飛ばす */
+      let tlHTML = "";
+      if (i + 1 < imgs.length && imgs[i + 1].dataset.type === "transition") {
+        tlHTML = `<div class="tl-label">${imgs[i + 1].dataset.filename}</div>`;
+        i++; // ← トランジション分をスキップ
+      }
+
+      entries.push(`
+  <div class="entry">
+    <div class="entry-number">${motifIndex}</div>
+    <div class="entry-content">
+      <img src="${dataURL}" class="motif-img">
+      <div class="caption caption-side">
+        <div class="caption-line title">${img.dataset.filename}</div>
+        <div class="caption-line">機体数　${img.dataset.planes}</div>
+        <div class="caption-line">サイズ　${img.dataset.size}</div>
+        <div class="caption-line">時間　　${img.dataset.time}</div>
+      </div>
+      </div>
+      </div>
+      ${tlHTML}
+`);
     }
 
-    /* ========= 2) テンプレートを DOM に挿入 ========== */
-    const htmlString = this.template
-      .replace(/{{title}}/g, "ストックコンテンツ")
-      .replace("{{contentBlocks}}", blocks.join(""));
+    /* ========= 2) 左右カラムに分割 ========== */
+    const MAX_PER_COLUMN = 6;
+    const leftCount = Math.min(motifIndex, MAX_PER_COLUMN);
+
+    const leftBlocks = entries.slice(0, leftCount).join("");
+    const rightBlocks = entries.slice(leftCount).join("");
+
+    /* ========= 3) テンプレートを DOM に挿入 ========== */
+    const htmlString = template
+      .replace("{{leftBlocks}}", leftBlocks)
+      .replace("{{rightBlocks}}", rightBlocks)
+      .replace("{{takeoffLabel}}", takeoffLabel)
+      .replace("{{landingLabel}}", landingLabel);
 
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = htmlString;
@@ -117,6 +147,7 @@ export class PDFExporter {
       }
 
       pdf.save("stockcontents.pdf");
+      console.log(this.template.slice(0, 80));
     } catch (err) {
       console.error("pdf addImage error", err);
       alert("PDF 生成に失敗しました（詳細はコンソール参照）");

@@ -1,0 +1,100 @@
+    * {
+        box-sizing: border-box
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: #000;
+        color: #eee;
+        font-family: sans-serif
+    }
+
+    .sheet {
+        display: flex;
+        width: 210mm;
+        min-height: 297mm;
+        padding: 28px 32px;
+        position: relative
+    }
+
+    .logo {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 110px
+    }
+
+    .separator {
+        width: 1px;
+        background: #555;
+        margin: 0 32px
+    }
+
+    /* ───── 共通 ───── */
+    .column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: relative
+    }
+
+    .baseline {
+        position: absolute;
+        left: 32px;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: #555
+    }
+
+    .entry {
+        display: grid;
+        grid-template-columns: 32px 1px auto;
+        column-gap: 12px
+    }
+
+    .entry-number {
+        font: 700 20px/32px sans-serif;
+        text-align: right;
+        padding-right: 4px
+    }
+
+    .entry-branch {
+        width: 1px;
+        background: #555
+    }
+
+    .entry-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start
+    }
+
+    .motif-img {
+        width: 160px;
+        border: 1px solid #666;
+        border-radius: 4px;
+        background: #111
+    }
+
+    .caption {
+        margin-top: 4px;
+        font-size: 12px;
+        line-height: 1.4
+    }
+
+    .section-label {
+        font-size: 14px;
+        font-weight: 700;
+        margin: 4px 0
+    }
+
+    .tl-label {
+        font-size: 12px;
+        color: #aaa;
+        border-top: 1px solid #555;
+        padding-top: 4px;
+        margin-top: 4px
+    }

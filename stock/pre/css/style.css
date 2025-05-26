@@ -509,15 +509,6 @@ select {
     max-width: 300px;
 }
 
-.tlCard video {
-    width: 100%;
-    height: auto;
-    border: 2px solid #1d1d1d;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: border-color 0.2s;
-}
-
 .tlCard video:hover {
     border-color: #ffa55a;
 }
@@ -698,6 +689,49 @@ select {
     transition: border-color 0.2s, color 0.2s;
 }
 
+.tlTextBtn {
+    min-width: 140px;
+    padding: 8px 16px;
+    margin: 6px;
+    font-size: 0.95rem;
+    color: #fff;
+    background: #000;
+    border: 2px solid;
+    border-image: linear-gradient(270deg, #ff0055, #ffcc00, #33ff00, #00ccff, #6600ff, #ff0055) 1;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.2s ease;
+    animation: rainbowBorder 3s linear infinite;
+    white-space: nowrap;
+}
+
+.tlTextBtn:hover {
+    transform: scale(1.05);
+}
+
+@keyframes rainbowBorder {
+    0% {
+        border-image-source: linear-gradient(270deg, #ff0055, #ffcc00, #33ff00, #00ccff, #6600ff, #ff0055);
+    }
+
+    100% {
+        border-image-source: linear-gradient(-270deg, #ff0055, #ffcc00, #33ff00, #00ccff, #6600ff, #ff0055);
+    }
+}
+
+/* 無点灯用（レインボーじゃない） */
+.tlPlainBtn {
+    background: #1d1d1d !important;
+    border: 1px solid #444 !important;
+    animation: none !important;
+    border-radius: 4px !important;
+    /* ← 同じ丸みを適用 */
+}
+
+.tlPlainBtn:hover {
+    background-color: #333 !important;
+    color: #ffa55a !important;
+}
 
 /* =========================================
    ログアウトボタン

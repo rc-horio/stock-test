@@ -66,30 +66,22 @@ function openTlModal(targetPlaceholder, type) {
 
   grid.innerHTML = "";
 
-  /* ★ CSV の行ごとに動画カードを生成 */
+  /* ★ CSV の行ごとにテキストボタンを生成 */
   tlData.forEach(({ file, name }) => {
-    const card = document.createElement("div");
-    card.className = "tlCard";
-    card.innerHTML = `
-        <video muted autoplay loop playsinline preload="metadata">
-          <source src="./assets/image/takeoffLanding/video/${file}.mp4" type="video/mp4">
-        </video>
-        <div style="color:#fff;font-size:12px;text-align:center;margin-top:4px;">${name}</div>
-    `;
-    card.querySelector("video").onclick = () => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = name === "無点灯" ? "tlTextBtn tlPlainBtn" : "tlTextBtn"; // ←ここで分岐
+    btn.textContent = name;
+    btn.onclick = () => {
       replacePlaceholderWithIcon(targetPlaceholder, file, type);
       closePanel();
     };
-    grid.appendChild(card);
+    grid.appendChild(btn);
   });
 
   const closePanel = () => {
     modal.classList.add("hidden");
     mask.classList.add("hidden");
-    grid.querySelectorAll("video").forEach((v) => {
-      v.pause();
-      v.currentTime = 0;
-    });
     document.removeEventListener("click", outsideWatcher);
   };
   mask.onclick = closePanel;
@@ -101,7 +93,6 @@ function openTlModal(targetPlaceholder, type) {
 
   modal.classList.remove("hidden");
   mask.classList.remove("hidden");
-  grid.querySelectorAll("video").forEach((v) => v.play().catch(() => {}));
 }
 
 /* -------------------- アイコンへ置換 -------------------- */

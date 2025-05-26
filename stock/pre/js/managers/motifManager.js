@@ -68,6 +68,8 @@ export function buildMotifList(csvArray, container) {
 
   internalMotifData.forEach((m) => {
     const imgPath = `./assets/image/motif/icon/${m.fileName}.jpg`;
+    const plane = Number(m.planeNum); // 例 145, 697 …
+    const group100 = Math.floor(plane / 100) * 100; // 145→100, 697→600
 
     // 画像が存在するかチェック
     const img = new Image();
@@ -75,7 +77,7 @@ export function buildMotifList(csvArray, container) {
 
     img.onload = () => {
       const section = document.createElement("section");
-      section.className = `m_${m.planeNum}`;
+      section.className = `m_${m.planeNum} m_${group100}`;
       section.innerHTML = `
           <div class="singleArray">
             <div class="box-img">

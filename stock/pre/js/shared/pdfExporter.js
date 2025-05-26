@@ -25,7 +25,7 @@ export class PDFExporter {
 
     let takeoffTitle = "";
     let landingTitle = "";
-    
+
     const imgs = [...this.container.querySelectorAll("img")];
     if (!imgs.length) {
       alert("フッターに画像がありません。");
@@ -45,6 +45,9 @@ export class PDFExporter {
     // タイトルがあれば「離陸／着陸 + スペース + タイトル」、なければ「離陸／着陸」のみ
     const takeoffLabel = "離陸" + (takeoffTitle ? `　${takeoffTitle}` : "");
     const landingLabel = "着陸" + (landingTitle ? `　${landingTitle}` : "");
+    const landingLabelHTML = `
+      <div class="landing-label">${landingLabel}</div>
+    `;
 
     const labelMap = {
       motif: "モチーフ",
@@ -90,11 +93,18 @@ export class PDFExporter {
       </div>
       ${tlHTML}
 `);
+      // ⭐ 最後のモチーフの直後に着陸ラベルを追加
+      if (
+        motifIndex === imgs.filter((img) => img.dataset.type === "motif").length
+      ) {
+        entries.push(landingLabelHTML);
+      }
     }
 
     /* ========= 2) 左右カラムに分割 ========== */
     const MAX_PER_COLUMN = 6;
-    const leftCount = Math.min(motifIndex, MAX_PER_COLUMN);
+    const leftCount =
+      motifIndex < MAX_PER_COLUMN ? motifIndex + 1 : MAX_PER_COLUMN;
 
     const leftBlocks = entries.slice(0, leftCount).join("");
     const rightBlocks = entries.slice(leftCount).join("");
@@ -103,8 +113,7 @@ export class PDFExporter {
     const htmlString = template
       .replace("{{leftBlocks}}", leftBlocks)
       .replace("{{rightBlocks}}", rightBlocks)
-      .replace("{{takeoffLabel}}", takeoffLabel)
-      .replace("{{landingLabel}}", landingLabel);
+      .replace("{{takeoffLabel}}", takeoffLabel);
 
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = htmlString;
@@ -119,6 +128,32 @@ export class PDFExporter {
       overflow: "hidden",
     });
     document.body.appendChild(tempDiv);
+
+    // ② 基準要素として「着陸ラベル」か「最後の .entry」を取得
+    const adjustBaseline = (column) => {
+      const base = column.querySelector(".baseline");
+      if (!base) return;
+
+      // 列内で 'baseline' 以外の直近の兄弟要素を全部取得
+      const children = Array.from(column.children).filter(
+        (el) => !el.classList.contains("baseline")
+      );
+
+      if (!children.length) return;
+
+      // いちばん下にある要素（entry / tl-label / landing-label など）
+      const target = children[children.length - 1];
+
+      // column 内の座標で高さを算出
+      const colRect = column.getBoundingClientRect();
+      const tgtRect = target.getBoundingClientRect();
+      const heightPx = tgtRect.bottom - colRect.top; // ← 下端まで
+
+      base.style.height = `${heightPx}px`;
+    };
+
+    // 左右それぞれ調整
+    tempDiv.querySelectorAll(".column").forEach(adjustBaseline);
 
     /* ========= 3) PDF 生成 (html2canvas → addImage) ========= */
     try {

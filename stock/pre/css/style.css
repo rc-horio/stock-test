@@ -271,35 +271,16 @@ select {
     margin-bottom: 30%;
 }
 
-/* ===== メディアクエリ: スマホ (max-width:767px) ===== */
-@media (max-width: 767px) {
-    #setGrid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-column-gap: 0;
-        margin: 0 20px;
-    }
+#setGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,
+            minmax(250px, max-content));
+    gap: 8px;
+    margin: 0 auto;
+    padding: 0 16px;
+    justify-content: center;
 }
 
-/* ===== メディアクエリ: タブレット (min-width:767px) ===== */
-@media (min-width: 767px) {
-    #setGrid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        grid-column-gap: 0;
-        margin: 0 20px;
-    }
-}
-
-/* ===== メディアクエリ: 大画面 (min-width:1800px) ===== */
-@media (min-width: 1800px) {
-    #setGrid {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        grid-column-gap: 0;
-        margin: 0 20px;
-    }
-}
 
 /* モチーフの画像ボックス */
 .box-img {
@@ -307,30 +288,14 @@ select {
     width: 100%;
     height: auto;
     cursor: pointer;
+    max-width: 300px;
 }
 
 .box-img img {
     width: 100%;
     height: auto;
+    max-width: 3050px;
 }
-
-/* .box-img {
-    position: relative;
-    cursor: pointer;
-    width: 320px;
-    height: 320px;
-}
-
-.box-img img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(.3);
-    width: auto;
-    height: auto;
-    max-width: none;
-} */
-
 
 /* 各モチーフ下の説明テキスト */
 .box-img p {

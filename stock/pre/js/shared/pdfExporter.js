@@ -1,7 +1,32 @@
+import { parseCSV } from "./util.js";
+
 export class PDFExporter {
   constructor(containerSelector) {
     this.container = document.querySelector(containerSelector);
-    this.template = null; // 初期は null
+    this.template = null;
+    this.motifMap = null;
+  }
+
+  /* ---------- CSV からメタデータを取得 (1回だけ) ---------- */
+  async #ensureMotifMap() {
+    if (this.motifMap) return this.motifMap; // キャッシュあり
+
+    const res = await fetch("./assets/csv/motifs.csv");
+    const text = await res.text();
+    const rows = parseCSV(text).slice(1); // ヘッダ除去
+
+    this.motifMap = new Map();
+    rows.forEach(([id, name, num, comment, file, , w, h, d, len]) => {
+      if (!file) return; // file がキーになる
+      this.motifMap.set(file, {
+        planeNum: num || "-",
+        width: w || "-",
+        height: h || "-",
+        depth: d || "-",
+        length: len || "-",
+      });
+    });
+    return this.motifMap;
   }
 
   async loadTemplate() {
@@ -22,6 +47,9 @@ export class PDFExporter {
   async export() {
     await document.fonts.ready;
     const template = await this.loadTemplate(); // ← テンプレート読み込み
+
+    // 2) メタデータを保証
+    const motifMap = await this.#ensureMotifMap();
 
     let takeoffTitle = "";
     let landingTitle = "";
@@ -71,6 +99,14 @@ export class PDFExporter {
       motifIndex++;
       const dataURL = await this.#imgToDataURL(img);
 
+      const fileName = img.dataset.filename;
+      const meta = motifMap.get(fileName) || {};
+      const planes = meta.planeNum;
+      const width = meta.width;
+      const height = meta.height;
+      const depth = meta.depth;
+      const timeSec = meta.length;
+
       /* 直後にトランジションがあれば取り込み、ループを 1 つ飛ばす */
       let tlHTML = "";
       if (i + 1 < imgs.length && imgs[i + 1].dataset.type === "transition") {
@@ -79,20 +115,22 @@ export class PDFExporter {
       }
 
       entries.push(`
-  <div class="entry">
-    <div class="entry-number">${motifIndex}</div>
-    <div class="entry-content">
-      <img src="${dataURL}" class="motif-img">
-      <div class="caption caption-side">
-        <div class="caption-line title">${img.dataset.filename}</div>
-        <div class="caption-line">機体数　${img.dataset.planes}</div>
-        <div class="caption-line">サイズ　${img.dataset.size}</div>
-        <div class="caption-line">時間　　${img.dataset.time}</div>
-      </div>
-      </div>
-      </div>
-      ${tlHTML}
-`);
+        <div class="entry">
+          <div class="entry-number">${motifIndex}</div>
+          <div class="entry-content">
+            <img src="${dataURL}" class="motif-img">
+              <div class="caption caption-side">
+                <div class="caption-line title">${fileName}</div>
+                <div class="caption-line">機体数　${planes} 機</div>
+                <div class="caption-line">サイズ　横幅 ${width}m　縦幅 ${height}m　奥行き ${depth}m</div>
+                <div class="caption-line">時間　　${timeSec}秒</div>
+              </div>
+            </img>
+          </div>
+        </div>
+        ${tlHTML}
+      `);
+
       // ⭐ 最後のモチーフの直後に着陸ラベルを追加
       if (
         motifIndex === imgs.filter((img) => img.dataset.type === "motif").length
@@ -123,7 +161,7 @@ export class PDFExporter {
       top: 0,
       visibility: "visible",
       width: "210mm",
-      background: "#000",
+      background: "#fff",
       minHeight: "297mm",
       overflow: "hidden",
     });
@@ -161,26 +199,31 @@ export class PDFExporter {
       const canvas = await html2canvas(tempDiv, {
         scale: 2,
         useCORS: true,
-        backgroundColor: "#000",
+        backgroundColor: "#fff",
       });
       const imgData = canvas.toDataURL("image/jpeg", 1.0);
       const pdf = new window.jspdf.jsPDF({ unit: "pt", format: "a4" });
       const pageW = pdf.internal.pageSize.getWidth();
       const pageH = pdf.internal.pageSize.getHeight();
+      const THRESHOLD = 1;
       const imgW = pageW;
       const imgH = (canvas.height * imgW) / canvas.width;
+      // —— 必ず 1 ページに描画 ——
+      let drawW = imgW;
+      let drawH = imgH;
 
-      if (imgH <= pageH) {
-        pdf.addImage(imgData, "JPEG", 0, 0, imgW, imgH);
-      } else {
-        let y = 0;
-        while (y < imgH) {
-          pdf.addImage(imgData, "JPEG", 0, -y, imgW, imgH);
-          y += pageH;
-          if (y < imgH) pdf.addPage();
-        }
+      // 高さがはみ出す場合は縮小
+      if (imgH > pageH) {
+        const scale = pageH / imgH; // 0〜1
+        drawW = imgW * scale;
+        drawH = imgH * scale;
       }
 
+      // 横は中央寄せ、縦は上詰め
+      const x = (pageW - drawW) / 2;
+      const y = 0;
+
+      pdf.addImage(imgData, "JPEG", x, y, drawW, drawH);
       pdf.save("stockcontents.pdf");
       console.log(this.template.slice(0, 80));
     } catch (err) {

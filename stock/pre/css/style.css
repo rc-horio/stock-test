@@ -1,4 +1,32 @@
 /* =========================================
+   共通部品
+========================================= */
+@keyframes colorGray-hover {
+    100% {
+        background: #333;
+        border-color: #777;
+    }
+}
+
+@keyframes colorGrayWhite-hover {
+    100% {
+        background: rgba(255, 255, 255, 0.08);
+    }
+}
+
+@keyframes colorOnly-hover {
+    100% {
+        color: rgb(255, 165, 165);
+    }
+}
+
+@keyframes colorAndBorder-hover {
+    100% {
+        border: 2px solid #777;
+    }
+}
+
+/* =========================================
    全体リセット & ベーススタイル
 ========================================= */
 body {
@@ -256,13 +284,11 @@ select {
     cursor: pointer;
 }
 
-/* Hover エフェクト */
 .imgHover:hover,
 #lebtn:hover {
     opacity: 0.5;
     transition-duration: 0.4s;
 }
-
 
 /* =========================================
    メインコンテンツ
@@ -314,22 +340,6 @@ select {
 /* フィルタリングで非表示にするクラス */
 #m_none {
     display: none;
-}
-
-/* =========================================
-   アニメーション
-========================================= */
-@keyframes colorOnly-hover {
-    100% {
-        color: rgb(255, 165, 165);
-    }
-}
-
-@keyframes colorAndBorder-hover {
-    100% {
-        color: rgb(255, 165, 165);
-        border: 1px solid rgb(255, 165, 165);
-    }
 }
 
 /* =========================================
@@ -464,7 +474,7 @@ select {
 }
 
 #sharedModalInput:hover {
-    animation: colorAndBorder-hover 0.5s both;
+    animation: colorGray-hover 0.5s both;
 }
 
 /* トランジションモーダル Body */
@@ -492,7 +502,7 @@ select {
 }
 
 .transCard video:hover {
-    border-color: #ffa55a;
+    animation: colorAndBorder-hover 0.5s both;
 }
 
 /* 離発着モーダル Body */
@@ -504,13 +514,46 @@ select {
     flex-wrap: wrap;
 }
 
-.tlCard {
-    width: 100%;
-    max-width: 300px;
+.tlTextBtn {
+    min-width: 140px;
+    padding: 8px 16px;
+    margin: 6px;
+    font-size: 0.95rem;
+    color: #fff;
+    background: #000;
+    border: 2px solid;
+    border-image: linear-gradient(270deg, #ff0055, #ffcc00, #33ff00, #00ccff, #6600ff, #ff0055) 1;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.2s ease;
+    animation: rainbowBorder 3s linear infinite;
+    white-space: nowrap;
 }
 
-.tlCard video:hover {
-    border-color: #ffa55a;
+.tlTextBtn:hover {
+    transform: scale(1.05);
+}
+
+@keyframes rainbowBorder {
+    0% {
+        border-image-source: linear-gradient(270deg, #ff0055, #ffcc00, #33ff00, #00ccff, #6600ff, #ff0055);
+    }
+
+    100% {
+        border-image-source: linear-gradient(-270deg, #ff0055, #ffcc00, #33ff00, #00ccff, #6600ff, #ff0055);
+    }
+}
+
+/* 無点灯用（レインボーじゃない） */
+.tlPlainBtn {
+    background: #1d1d1d !important;
+    border: 1px solid #444 !important;
+    animation: none !important;
+    border-radius: 4px !important;
+}
+
+.tlPlainBtn:hover {
+    animation: colorOnly-hover 0.5s both;
 }
 
 /* =========================================
@@ -555,26 +598,20 @@ select {
 
 .footerIcon {
     flex: 0 0 var(--footer-unit-size);
-    /* 等幅・縮まない */
     height: var(--footer-unit-size);
     margin: 0;
-    /* 個別 margin は除去 */
     position: relative;
-    /* 枠線の基準 */
     box-sizing: border-box;
-    /* 枠線を内側計算 */
     display: inline-block;
     width: 100px;
     background-color: transparent;
     margin-left: 0;
-    /* ✅ 左寄りになる原因を除去 */
 }
 
 .footerIcon img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* アスペクト維持してトリミング */
     border-radius: 6px;
     cursor: pointer;
 }
@@ -606,33 +643,18 @@ select {
 }
 
 #PDFoutput {
-    margin: 4px 0 0 30px;
+    background: transparent;
+    color: #ccc;
+    border: 1px solid #555;
+    padding: 6px 12px;
     font-size: 12px;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 #PDFoutput:hover {
-    animation: colorOnly-hover 0.5s both;
-}
-
-.plusBtn {
-    flex: 0 0 var(--footer-unit-size);
-    height: var(--footer-unit-size);
-    font-size: calc(var(--footer-unit-size) * 0.5);
-    margin: 0;
-    border: none;
-    border-radius: 6px;
-    background: transparent;
-    color: #aaa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: color 0.2s ease;
-    cursor: pointer;
-}
-
-.plusBtn:hover {
-    color: #8ab4ff;
+    animation: colorGrayWhite-hover 0.5s both;
 }
 
 .footerItemClose {
@@ -665,7 +687,8 @@ select {
     border-radius: 6px;
 }
 
-/* 離発着 */
+/* トランジション・離発着 */
+.transitionPlaceholder .tlBox,
 .tlPlaceholder .tlBox {
     width: 100px;
     height: 100px;
@@ -674,68 +697,38 @@ select {
     justify-content: center;
     border: 2px dashed #575757;
     border-radius: 6px;
-    color: #bbb;
-    font-size: 14px;
+    color: #fff;
+    font-size: 12px;
     cursor: pointer;
+    background: transparent;
+    text-align: center
+}
+
+.transitionPlaceholder:hover .tlBox,
+.tlPlaceholder:hover .tlBox {
+    animation: colorGrayWhite-hover 0.5s both;
 }
 
 .takeoffPlaceholder {
     margin-right: 5px;
 }
 
-.tlPlaceholder:hover .tlBox {
-    border-color: #ffa55a;
-    color: #ffa55a;
-    transition: border-color 0.2s, color 0.2s;
-}
-
-.tlTextBtn {
-    min-width: 140px;
-    padding: 8px 16px;
-    margin: 6px;
-    font-size: 0.95rem;
-    color: #fff;
-    background: #000;
-    border: 2px solid;
-    border-image: linear-gradient(270deg, #ff0055, #ffcc00, #33ff00, #00ccff, #6600ff, #ff0055) 1;
-    cursor: pointer;
-    text-align: center;
-    transition: transform 0.2s ease;
-    animation: rainbowBorder 3s linear infinite;
-    white-space: nowrap;
-}
-
-.tlTextBtn:hover {
-    transform: scale(1.05);
-}
-
-@keyframes rainbowBorder {
-    0% {
-        border-image-source: linear-gradient(270deg, #ff0055, #ffcc00, #33ff00, #00ccff, #6600ff, #ff0055);
-    }
-
-    100% {
-        border-image-source: linear-gradient(-270deg, #ff0055, #ffcc00, #33ff00, #00ccff, #6600ff, #ff0055);
-    }
-}
-
-/* 無点灯用（レインボーじゃない） */
-.tlPlainBtn {
-    background: #1d1d1d !important;
-    border: 1px solid #444 !important;
-    animation: none !important;
-    border-radius: 4px !important;
-    /* ← 同じ丸みを適用 */
-}
-
-.tlPlainBtn:hover {
-    background-color: #333 !important;
-    color: #ffa55a !important;
-}
-
 /* =========================================
    ログアウトボタン
 ========================================= */
+.pdf-output,
+.logout-btn,
+.back-btn {
+    background: transparent;
+    color: #ccc;
+    border: 1px solid #555;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
 #logoutBtn {
     position: absolute;
     top: 10px;
@@ -750,23 +743,10 @@ select {
     z-index: 1000;
 }
 
-.logout-btn,
-.back-btn {
-    background: transparent;
-    color: #ccc;
-    border: 1px solid #555;
-    padding: 6px 12px;
-    font-size: 0.85rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
+.pdf-output:hover,
 .logout-btn:hover,
 .back-btn:hover {
-    background: #333;
-    color: #fff;
-    border-color: #777;
+    animation: colorGray-hover 0.5s both;
 }
 
 @media (max-width: 600px) {

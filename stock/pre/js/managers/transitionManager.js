@@ -1,7 +1,18 @@
-import { createDividerPlus,adjustPlusButtons } from "./motifManager.js";
+import { createDividerPlus, adjustPlusButtons } from "./motifManager.js";
 
 /* -----------------------------  データ保持  ----------------------------- */
 let transitionList = [];
+/* -------------------- 定数 -------------------- */
+const TL_OPTIONS = {
+  takeoff: [
+    { label: "レインボー", file: "0231_離陸", isImage: true },
+    { label: "無点灯", file: null, isImage: false },
+  ],
+  landing: [
+    { label: "レインボー", file: "0232_着陸", isImage: true },
+    { label: "無点灯", file: null, isImage: false },
+  ],
+};
 
 export function setTransitionData(csvArray) {
   const [, ...rows] = csvArray;

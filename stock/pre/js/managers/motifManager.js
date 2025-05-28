@@ -170,8 +170,8 @@ export function createMotifElement(fileName) {
 
 export function createDividerPlus() {
   const div = document.createElement("div");
-  div.className = "divider plusBtn";
-  div.textContent = "+";
+  div.className = "footerIcon transitionPlaceholder plusBtn";
+  div.innerHTML = `<div class="tlBox">トランジション<br>選択</div>`;
   div.addEventListener("click", () => openTransitionModal(div));
   return div;
 }
@@ -198,38 +198,4 @@ function rebuildPlusButtons() {
     }
     node.after(createDividerPlus());
   });
-}
-
-/* ----------------  M → T → M … の順序保証（安全版）  ---------------- */
-function restoreMTMOrder() {
-  if (!footerItemRef) return;
-
-  // 1) いま並んでいるアイコンを取得
-  const originals = Array.from(
-    footerItemRef.querySelectorAll(
-      ".motifIcon, .transitionIconWrapper, .landingPlaceholder"
-    )
-  );
-
-  // 2) Motif と Transition を別々に取り出してキューにする
-  const motifs = originals.filter((n) => n.classList.contains("motifIcon"));
-  const transitions = originals.filter((n) =>
-    n.classList.contains("transitionIconWrapper")
-  );
-  const landing = originals.find((n) =>
-    n.classList.contains("landingPlaceholder")
-  );
-
-  // 3) 交互配列を作る: Motif → Transition → Motif → …
-  const ordered = [];
-  while (motifs.length || transitions.length) {
-    if (motifs.length) ordered.push(motifs.shift());
-    if (transitions.length) ordered.push(transitions.shift());
-  }
-  if (landing) ordered.push(landing);
-
-  // 4) DocumentFragment にまとめて差し替え
-  const frag = document.createDocumentFragment();
-  ordered.forEach((n) => frag.appendChild(n));
-  footerItemRef.appendChild(frag);
 }

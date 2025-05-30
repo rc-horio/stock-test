@@ -171,7 +171,7 @@ export function createMotifElement(fileName) {
 export function createDividerPlus() {
   const div = document.createElement("div");
   div.className = "footerIcon transitionPlaceholder plusBtn";
-  div.innerHTML = `<div class="tlBox">トランジション<br>選択</div>`;
+  div.innerHTML = `<div class="tlBox">トランジションを<br>選択する</div>`;
   div.addEventListener("click", () => openTransitionModal(div));
   return div;
 }

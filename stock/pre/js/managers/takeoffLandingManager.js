@@ -1,34 +1,28 @@
-import { loadCSV, parseCSV } from "../shared/util.js";
-
+// takeoffLandingManager.js
 /* -------------------- 定数 -------------------- */
 const TYPES = {
-  takeoff: { label: "離陸", className: "takeoffPlaceholder" },
-  landing: { label: "着陸", className: "landingPlaceholder" },
+  takeoff: { label: "離陸を<br>選択する", className: "takeoffPlaceholder" },
+  landing: { label: "着陸を<br>選択する", className: "landingPlaceholder" },
 };
 
-const CSV_PATH = "./assets/csv/takeoffLanding.csv"; // ★
+/* TL 選択肢（CSV 不使用版） */
+const TL_CHOICES = {
+  takeoff: [
+    { name: "レインボー", file: "0231_離陸" },
+    { name: "無点灯", file: "" },
+  ],
+  landing: [
+    { name: "レインボー", file: "0232_着陸" },
+    { name: "無点灯", file: "" },
+  ],
+};
 
-// -------------------- 状態 --------------------
+/* -------------------- 状態 -------------------- */
 let footerItemRef = null;
-let tlData = []; // ★ CSV を整形した配列
 
 /* -------------------- 初期化 -------------------- */
 export function initTakeoffLanding(footerEl) {
   footerItemRef = footerEl;
-
-  // CSV 読み込み
-  loadCSV(CSV_PATH, (text) => {
-    tlData = parseCSV(text)
-      .slice(1) // ヘッダ除去
-      .filter((r) => r[3]) // 画像名必須
-      .map(([id, name, comment, file]) => ({
-        id,
-        name,
-        comment,
-        file,
-      }));
-  });
-
   footerEl.appendChild(createPlaceholder("takeoff"));
   footerEl.appendChild(createPlaceholder("landing"));
 }
@@ -46,13 +40,11 @@ function createPlaceholder(type, attachClick = true) {
 
 /* -------------------- モーダル -------------------- */
 function openTlModal(targetPlaceholder, type) {
-  // ── 他パネルを閉じる（Transition / Shared）────
-  const transMask = document.getElementById("transitionModalMask");
-  if (transMask && !transMask.classList.contains("hidden")) transMask.click();
-
-  const sharedMask = document.getElementById("sharedModalMask");
-  if (sharedMask && !sharedMask.classList.contains("hidden"))
-    sharedMask.click();
+  // 既存パネルを閉じる（Transition / Shared）
+  ["transitionModalMask", "sharedModalMask"].forEach((id) => {
+    const mask = document.getElementById(id);
+    if (mask && !mask.classList.contains("hidden")) mask.click();
+  });
 
   const mask = document.getElementById("tlModalMask");
   const modal = document.getElementById("tlModal");
@@ -66,19 +58,20 @@ function openTlModal(targetPlaceholder, type) {
 
   grid.innerHTML = "";
 
-  /* ★ CSV の行ごとにテキストボタンを生成 */
-  tlData.forEach(({ file, name }) => {
+  /* ★ 選択肢をボタン化 */
+  TL_CHOICES[type].forEach(({ name, file }) => {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = name === "無点灯" ? "tlTextBtn tlPlainBtn" : "tlTextBtn"; // ←ここで分岐
+    btn.className = name === "無点灯" ? "tlTextBtn tlPlainBtn" : "tlTextBtn";
     btn.textContent = name;
     btn.onclick = () => {
-      replacePlaceholderWithIcon(targetPlaceholder, file, type);
+      replacePlaceholder(targetPlaceholder, { name, file }, type);
       closePanel();
     };
     grid.appendChild(btn);
   });
 
+  /* 開閉処理 */
   const closePanel = () => {
     modal.classList.add("hidden");
     mask.classList.add("hidden");
@@ -95,29 +88,41 @@ function openTlModal(targetPlaceholder, type) {
   mask.classList.remove("hidden");
 }
 
-/* -------------------- アイコンへ置換 -------------------- */
-function replacePlaceholderWithIcon(placeholder, fileName, tlType) {
+/* -------------------- 置換処理 -------------------- */
+function replacePlaceholder(placeholder, { name, file }, tlType) {
   placeholder.onclick = null;
   placeholder.classList.remove("tlPlaceholder");
-  placeholder.innerHTML = `
-      <img src="./assets/image/takeoffLanding/icon/${fileName}.jpg"
+
+  if (name === "無点灯") {
+    // テキストのみ
+    placeholder.innerHTML = `
+      <div class="container tlPlainText"
+           data-type="${tlType}" data-filename="">
+        無点灯
+      </div>
+      <div class="footerItemClose tlCancel">Cancel</div>
+    `;
+  } else {
+    // 画像アイコン
+    placeholder.innerHTML = `
+      <img src="./assets/image/takeoffLanding/icon/${file}.jpg"
            class="container"
            data-type="${tlType}"
-           data-filename="${fileName}">
+           data-filename="${file}">
       <div class="footerItemClose tlCancel">Cancel</div>
-  `;
+    `;
+  }
 }
 
 /* -------------------- Cancel -------------------- */
 export function cancelTakeoffLanding(iconWrapper) {
   const type =
     iconWrapper.dataset.tlType ||
-    iconWrapper.querySelector("img")?.dataset.type;
+    iconWrapper.querySelector("[data-type]")?.dataset.type;
   if (!type) return;
 
   const silent = createPlaceholder(type, false);
   iconWrapper.replaceWith(silent);
-  setTimeout(() => {
-    silent.onclick = () => openTlModal(silent, type);
-  });
+  setTimeout(() => (silent.onclick = () => openTlModal(silent, type)));
 }
+  

@@ -353,7 +353,7 @@ select {
     top: 25%;
     left: 50%;
     transform: translate(-50%, -25%);
-    background: #000;
+    background: #0f0f0f;
     border-radius: 4px;
     z-index: 999;
 }
@@ -380,8 +380,9 @@ select {
 
 /* 離発着モーダル 個別サイズ */
 #tlModal {
-    width: 95%;
-    max-width: 1000px;
+    top: 40%;
+    width: 50%;
+    max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
     display: flex;
@@ -451,6 +452,8 @@ select {
 
 #sharedComment,
 #sharedInfoText {
+    margin-top: -4px;
+    margin-bottom: 4px;
     color: #fff;
     font-size: clamp(12px, 2vw, 16px);
     white-space: nowrap;
@@ -467,6 +470,8 @@ select {
 
 /* ===== “＋フッターに追加” ボタン ===== */
 #sharedModalInput {
+    margin-top: -4px;
+    margin-bottom: 4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -520,7 +525,7 @@ select {
     display: flex;
     gap: 18px;
     justify-content: center;
-    padding: 8px;
+    padding: 30px;
     flex-wrap: wrap;
 }
 
@@ -531,7 +536,8 @@ select {
     font-size: 0.95rem;
     color: #fff;
     background: #000;
-    border: 2px solid;
+    border: 1px solid;
+    border-radius: 60px; 
     border-image: linear-gradient(270deg, #ff0055, #ffcc00, #33ff00, #00ccff, #6600ff, #ff0055) 1;
     cursor: pointer;
     text-align: center;
@@ -554,12 +560,12 @@ select {
     }
 }
 
-/* 無点灯用（レインボーじゃない） */
+/* 無点灯用 */
 .tlPlainBtn {
-    background: #1d1d1d !important;
+    background: #000000 !important;
     border: 1px solid #444 !important;
     animation: none !important;
-    border-radius: 4px !important;
+    border-radius: 0 !important;
 }
 
 .tlPlainBtn:hover {

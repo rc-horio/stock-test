@@ -53,7 +53,7 @@ export function openTransitionModal(targetPlusDiv) {
 
     /* 動画クリックで選択 */
     card.querySelector(".transPreview").onclick = () => {
-      replacePlusWithTransition(targetPlusDiv, t.filename);
+      replacePlusWithTransition(targetPlusDiv, t);
       closePanel();
     };
 
@@ -98,14 +98,15 @@ export function openTransitionModal(targetPlusDiv) {
 /**
  * + ボタンをトランジションアイコンに置換
  */
-export function replacePlusWithTransition(oldPlusDiv, fileName) {
+export function replacePlusWithTransition(oldPlusDiv, t) {
   const wrapper = document.createElement("div");
   wrapper.className = "footerIcon transitionIconWrapper";
   wrapper.innerHTML = `
-        <img src="./assets/image/transition/icon/${fileName}.jpg"
+        <img src="./assets/image/transition/icon/${t.filename}.jpg"
              class="container"
              data-type="transition"
-             data-filename="${fileName}">
+             data-name="${t.name}"
+             data-filename="${t.filename}">
         <div class="footerItemClose transitionCancel">Cancel</div>
     `;
 

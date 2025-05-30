@@ -54,21 +54,29 @@ export class PDFExporter {
     let takeoffTitle = "";
     let landingTitle = "";
 
+    // 画像（motif・transition）だけ
     const imgs = [...this.container.querySelectorAll("img")];
     if (!imgs.length) {
       alert("フッターに画像がありません。");
       return;
     }
 
-    // 画像リストを先にスキャンして、離陸／着陸タイトルだけ拾っておく
-    for (const img of imgs) {
-      if (img.dataset.type === "takeoff") {
-        takeoffTitle = img.dataset.filename || "";
-      }
-      if (img.dataset.type === "landing") {
-        landingTitle = img.dataset.filename || "";
-      }
-    }
+    // 離陸／着陸 (img でも div でも OK)
+    const tlElems = [
+      ...this.container.querySelectorAll(
+        '[data-type="takeoff"], [data-type="landing"]'
+      ),
+    ];
+
+    tlElems.forEach((el) => {
+      const type = el.dataset.type; // "takeoff" | "landing"
+      const fname = el.dataset.filename; // "" なら無点灯
+
+      const label = fname ? "レインボー" : "無点灯";
+
+      if (type === "takeoff") takeoffTitle = label;
+      if (type === "landing") landingTitle = label;
+    });
 
     // タイトルがあれば「離陸／着陸 + スペース + タイトル」、なければ「離陸／着陸」のみ
     const takeoffLabel = "離陸" + (takeoffTitle ? `　${takeoffTitle}` : "");
@@ -110,7 +118,7 @@ export class PDFExporter {
       /* 直後にトランジションがあれば取り込み、ループを 1 つ飛ばす */
       let tlHTML = "";
       if (i + 1 < imgs.length && imgs[i + 1].dataset.type === "transition") {
-        tlHTML = `<div class="tl-label">${imgs[i + 1].dataset.filename}</div>`;
+        tlHTML = `<div class="tl-label">${imgs[i + 1].dataset.name}</div>`;
         i++; // ← トランジション分をスキップ
       }
 

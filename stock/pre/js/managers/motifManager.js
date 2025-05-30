@@ -162,8 +162,10 @@ export function createMotifElement(fileName) {
   const div = document.createElement("div");
   div.className = "footerIcon motifIcon";
   div.innerHTML = `
-    <img src="./assets/image/motif/icon/${fileName}.jpg" class="container"
-         data-type="motif" data-filename="${fileName}">
+    <img src="./assets/image/motif/icon/${fileName}.jpg"
+         class="container"
+         data-type="motif"
+         data-filename="${fileName}">
     <div class="footerItemClose motifCancel">Cancel</div>`;
   return div;
 }

@@ -16,7 +16,7 @@ export class PDFExporter {
     const rows = parseCSV(text).slice(1); // ヘッダ除去
 
     this.motifMap = new Map();
-    rows.forEach(([id, name, num, comment, file, , w, h, d, len]) => {
+    rows.forEach(([id, name, num, comment, file, w, h, d, len]) => {
       if (!file) return; // file がキーになる
       this.motifMap.set(file, {
         planeNum: num || "-",

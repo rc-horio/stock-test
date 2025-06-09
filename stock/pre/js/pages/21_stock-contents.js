@@ -1,4 +1,4 @@
-import { loadCSV, parseCSV } from "../shared/util.js";
+import { loadCSV, parseCSV, CDN_BASE } from "../shared/util.js";
 import {
   buildMotifList,
   setFooterItem,
@@ -122,14 +122,20 @@ function initializeMainApp() {
   // 離陸／着陸プレースホルダを配置
   initTakeoffLanding(footerItem);
 
-  // モチーフデータの読み込み
+  // モチーフデータの読み込み（★ローカルファイルから取得）
   loadCSV("./assets/csv/motifs.csv", (text) => {
+
+  // モチーフデータの読み込み（★R2 から取得）
+  // loadCSV(`${CDN_BASE}/assets/csv/motifs.csv`, (text) => {
     const csvArray = parseCSV(text);
     buildMotifList(csvArray, colorList);
   });
 
-  // トランジションデータの読み込み
+  // トランジションデータの読み込み（★ローカルファイルから取得）
   loadCSV("./assets/csv/transitions.csv", (text) => {
+
+  // トランジションデータの読み込み（★R2 から取得）
+  // loadCSV(`${CDN_BASE}/assets/csv/transitions.csv`, (text) => {
     const transitionCsvArray = parseCSV(text);
     setTransitionData(transitionCsvArray);
   });

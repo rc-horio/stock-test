@@ -1,3 +1,6 @@
+// R2 の Public Development URL を基底パスとして定義
+export const CDN_BASE = "https://pub-72b97a4729b74ee3b4e9c9a5481e8d33.r2.dev";
+
 /**
  * CSVを非同期で読み込み、テキストをコールバックに渡す
  * @param {string} url

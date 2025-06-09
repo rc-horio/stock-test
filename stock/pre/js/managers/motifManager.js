@@ -1,5 +1,6 @@
 import { openTransitionModal } from "./transitionManager.js";
 import { openSharedModal } from "../shared/sharedModal.js";
+import { CDN_BASE } from "../shared/util.js";
 
 let footerItemRef = null;
 let internalMotifData = [];
@@ -67,7 +68,12 @@ export function buildMotifList(csvArray, container) {
   internalMotifData = parseMotifData(csvArray);
 
   internalMotifData.forEach((m) => {
+    // モチーフ画像の読み込み（★ローカルファイルから取得）
     const imgPath = `./assets/image/motif/icon/${m.fileName}.jpg`;
+
+    // モチーフ画像の読み込み（★R2から取得）
+    // const imgPath = `${CDN_BASE}/assets/iamge/motif/icon/${m.fileName}.jpg`;
+
     const plane = Number(m.planeNum); // 例 145, 697 …
     const group100 = Math.floor(plane / 100) * 100; // 145→100, 697→600
 
@@ -93,7 +99,12 @@ export function buildMotifList(csvArray, container) {
 
       section.querySelector("a").addEventListener("click", (e) => {
         const img = e.target;
+        // モチーフ動画の読み込み（★ローカルファイルから取得）
         const videoPath = `./assets/image/motif/video/${m.fileName}.mp4`;
+
+        // モチーフ動画の読み込み（★R2 から取得）
+        // const videoPath = `${CDN_BASE}/assets/image/motif/video/${m.fileName}.mp4`;
+
         const info = `縦:${img.dataset.height} / 横:${img.dataset.width} / 奥行:${img.dataset.depth} / 総尺:${img.dataset.length}`;
 
         openSharedModal({
@@ -120,7 +131,7 @@ export function buildMotifList(csvArray, container) {
 function parseMotifData(csvArray) {
   const [, ...rows] = csvArray;
   return rows
-    .map(([id, name, num, comment, file, , w, h, d, len]) => ({
+    .map(([id, name, num, comment, file, w, h, d, len]) => ({
       id: id || "-",
       motifName: name || "-",
       planeNum: num || "-",
@@ -161,6 +172,13 @@ export function cancelMotif(motifEl) {
 export function createMotifElement(fileName) {
   const div = document.createElement("div");
   div.className = "footerIcon motifIcon";
+
+  // （★ローカルファイルから取得する）
+  // <img src="./assets/image/motif/icon/${fileName}.jpg"
+
+  // （★R3から取得）
+  // <img src="${CDN_BASE}/assets/image/motif/icon/${fileName}.jpg"
+
   div.innerHTML = `
     <img src="./assets/image/motif/icon/${fileName}.jpg"
          class="container"

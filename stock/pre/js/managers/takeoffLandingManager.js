@@ -1,4 +1,5 @@
-// takeoffLandingManager.js
+import { flashElement } from "../shared/feedback.js";
+
 /* -------------------- 定数 -------------------- */
 const TYPES = {
   takeoff: { label: "離陸を<br>選択する", className: "takeoffPlaceholder" },
@@ -92,6 +93,7 @@ function openTlModal(targetPlaceholder, type) {
 function replacePlaceholder(placeholder, { name, file }, tlType) {
   placeholder.onclick = null;
   placeholder.classList.remove("tlPlaceholder");
+  flashElement(placeholder);
 
   if (name === "無点灯") {
     // テキストのみ
@@ -105,10 +107,10 @@ function replacePlaceholder(placeholder, { name, file }, tlType) {
   } else {
     // 画像アイコン
     placeholder.innerHTML = `
-      <img src="./assets/image/takeoffLanding/icon/${file}.jpg"
-           class="container"
-           data-type="${tlType}"
-           data-filename="${file}">
+      <div class="container tlPlainText"
+           data-type="${tlType}" data-filename="">
+        レインボー
+      </div>
       <div class="footerItemClose tlCancel">Cancel</div>
     `;
   }
@@ -125,4 +127,3 @@ export function cancelTakeoffLanding(iconWrapper) {
   iconWrapper.replaceWith(silent);
   setTimeout(() => (silent.onclick = () => openTlModal(silent, type)));
 }
-  

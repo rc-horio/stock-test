@@ -1,6 +1,7 @@
 import { openTransitionModal } from "./transitionManager.js";
 import { openSharedModal } from "../shared/sharedModal.js";
 import { CDN_BASE } from "../shared/util.js";
+import { flashElement } from "../shared/feedback.js";
 
 let footerItemRef = null;
 let internalMotifData = [];
@@ -131,14 +132,14 @@ export function buildMotifList(csvArray, container) {
 function parseMotifData(csvArray) {
   const [, ...rows] = csvArray;
   return rows
-    .map(([id, name, num, comment, file, w, h, d, len]) => ({
+    .map(([id, name, num, comment, file, h, w, d, len]) => ({
       id: id || "-",
       motifName: name || "-",
       planeNum: num || "-",
       comment: comment || "-",
       fileName: file || "-",
-      width: w || "-",
       height: h || "-",
+      width: w || "-",
       depth: d || "-",
       length: len || "-",
     }))
@@ -161,6 +162,7 @@ function addMotifToFooter(fileName) {
   const motifEl = createMotifElement(fileName);
   const landing = footerItemRef.querySelector(".landingPlaceholder");
   footerItemRef.insertBefore(motifEl, landing);
+  flashElement(motifEl);
   rebuildPlusButtons();
 }
 

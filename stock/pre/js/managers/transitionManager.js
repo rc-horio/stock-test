@@ -1,4 +1,5 @@
 import { createDividerPlus, adjustPlusButtons } from "./motifManager.js";
+import { flashElement } from "../shared/feedback.js";
 
 /* -----------------------------  データ保持  ----------------------------- */
 let transitionList = [];
@@ -101,6 +102,7 @@ export function openTransitionModal(targetPlusDiv) {
 export function replacePlusWithTransition(oldPlusDiv, t) {
   const wrapper = document.createElement("div");
   wrapper.className = "footerIcon transitionIconWrapper";
+  flashElement(wrapper);
   wrapper.innerHTML = `
         <img src="./assets/image/transition/icon/${t.filename}.jpg"
              class="container"

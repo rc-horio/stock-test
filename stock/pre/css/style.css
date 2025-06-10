@@ -26,6 +26,17 @@
     }
 }
 
+/* === flash highlight: 0.6 秒だけ縁を光らせる === */
+@keyframes flashAddAnim {
+    0% {
+        box-shadow: 0 0 0 2px #ff4949;
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 transparent;
+    }
+}
+
 /* =========================================
    全体リセット & ベーススタイル
 ========================================= */
@@ -537,7 +548,7 @@ select {
     color: #fff;
     background: #000;
     border: 1px solid;
-    border-radius: 60px; 
+    border-radius: 60px;
     border-image: linear-gradient(270deg, #ff0055, #ffcc00, #33ff00, #00ccff, #6600ff, #ff0055) 1;
     cursor: pointer;
     text-align: center;
@@ -580,6 +591,34 @@ select {
     --footer-unit-size: clamp(80px, 9vw, 110px);
 }
 
+/* ▼▲トグルバー */
+#footerToggle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: fit-content;
+    min-width: 120px;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 15px;
+    font-size: 13px;
+    color: #fff;
+    background: rgba(30, 30, 30, 0.95);
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 6px;
+    border: 1px solid #666;
+    transition: background 0.3s ease;
+    z-index: 100;
+}
+
+#footerToggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* フッター本体 */
 #footerPanel {
     position: fixed;
     bottom: 0;
@@ -589,7 +628,13 @@ select {
     flex-direction: column;
     background: rgba(56, 56, 56, 0.144);
     backdrop-filter: blur(12px);
+    transition: transform 0.4s ease;
     z-index: 50;
+}
+
+/* “閉じる” 状態 */
+#footerPanel.closed {
+    transform: translateY(calc(100% - 40px));
 }
 
 #footertitle {
@@ -603,7 +648,7 @@ select {
     display: flex;
     align-items: flex-start;
     gap: 24px;
-    padding: 0 0 12px 25px;
+    padding: 2px 0 12px 25px;
     overflow-x: auto;
     overflow-y: hidden;
     overscroll-behavior-x: contain;
@@ -686,6 +731,11 @@ select {
 
 .footerItemClose:hover {
     animation: colorOnly-hover 0.5s both;
+}
+
+.flashAdd {
+    animation: flashAddAnim 5s ease-out;
+    border-radius: 3px;
 }
 
 .draggingIcon {

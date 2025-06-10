@@ -74,7 +74,7 @@
         </div>
 
     </div>
-    
+
     <div class="sharedModalFooter">
         <div id="sharedInfoText"></div>
         <div id="sharedModalInput">＋フッターに追加</div>
@@ -110,6 +110,7 @@
 
 <!-- フッター -->
 <div id="footerPanel">
+    <div id="footerToggle">▼ フッターを非表示</div>
     <div id="footertitle">
         <div id="PDFoutput">PDF 出力</div>
     </div>
@@ -118,5 +119,18 @@
 
 <!-- スクリプト -->
 <script type="module" src="./js/\\/pages/21_stock-contents.js"></script>
+<script type="module" src="./js/shared/feedback.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggle = document.getElementById('footerToggle');
+        const footer = document.getElementById('footerPanel');
+
+        toggle.addEventListener('click', () => {
+            const closed = footer.classList.toggle('closed');   // true → 閉じた
+            toggle.textContent = closed ? '▲ フッターを表示' : '▼ フッターを非表示';
+        });
+    });
+</script>
+
 
 </html>

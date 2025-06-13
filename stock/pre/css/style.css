@@ -607,6 +607,13 @@ select {
     text-align: center;
 }
 
+.transitionName {
+    text-align: center;
+    font-size: 0.85em;
+    margin-top: 4px;
+    color: #5f5f5f;
+}
+
 .transCard video {
     width: 100%;
     border: 2px solid #1d1d1d;

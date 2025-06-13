@@ -7,7 +7,10 @@ let transitionList = [];
 export function setTransitionData(csvArray) {
   const [, ...rows] = csvArray;
   transitionList = rows
-    .map(([id, name, droneType, filename]) => ({ id, name, droneType, filename }))
+    .map(([id, name]) => {
+      const filename = `${id}_${name}`;
+      return { id, name, filename };
+    })
     .filter((t) => t.id);
 }
 
@@ -48,11 +51,13 @@ export function openTransitionModal(targetPlusDiv) {
     card.className = "transCard";
 
     card.innerHTML = `
-              <video class="transPreview" muted autoplay loop playsinline preload="metadata">
-                <source src="./assets/image/transition/video/${t.filename}.mp4" type="video/mp4">
-              </video>`;
+    <video class="transPreview" muted autoplay loop playsinline preload="metadata">
+      <source src="./assets/image/transition/video/${t.filename}.mp4" type="video/mp4">
+    </video>
+    <div class="transitionName">${t.name}</div>
+  `;
 
-    /* 動画クリックで選択 */
+    // 動画クリックで選択
     card.querySelector(".transPreview").onclick = () => {
       replacePlusWithTransition(targetPlusDiv, t);
       closePanel();

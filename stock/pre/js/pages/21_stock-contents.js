@@ -84,6 +84,15 @@ function setupCascadingFilter() {
 
     // ▼ サブメニューを持つ項目（root / has-sub）は開閉トグルだけ
     if (li.classList.contains("root") || li.classList.contains("has-sub")) {
+      // 同じ階層にある兄弟の open を全て除去
+      const siblings = li.parentElement.querySelectorAll(
+        ":scope > li.has-sub.open"
+      );
+      siblings.forEach((sib) => {
+        if (sib !== li) sib.classList.remove("open");
+      });
+
+      // クリックした要素だけトグル
       li.classList.toggle("open");
       e.stopPropagation();
       e.preventDefault();

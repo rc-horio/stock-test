@@ -57,9 +57,9 @@ function showMainUI() {
   }
 }
 
-/* --------------------
+/* ----------------------------------
    階層型メニュー クリック式フィルタ
--------------------- */
+---------------------------------- */
 function setupCascadingFilter() {
   const menu = document.getElementById("filterMenu");
 
@@ -96,7 +96,7 @@ function setupCascadingFilter() {
 
     switch (type) {
       case "planes":
-        filterByPlanes(value); // 例：「100機」クリック
+        filterByPlanes(value);
         break;
       case "season":
         filterBySeason(value);
@@ -120,7 +120,7 @@ function setupCascadingFilter() {
 /* --- 機体数フィルタ --- */
 function filterByPlanes(val) {
   resetVisibility();
-  const targetClass = `m_${Number(val)}`; // "m_100" 等
+  const targetClass = `m_${Number(val)}`;
 
   document.querySelectorAll("#setGrid > section").forEach((sec) => {
     if (val === "0000" || sec.classList.contains(targetClass)) {

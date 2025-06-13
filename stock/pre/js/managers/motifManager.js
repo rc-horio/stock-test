@@ -151,12 +151,12 @@ function parseMotifData(csvArray) {
         w,
         d,
         len,
-        _truncate, // 8列目は無視
+        _truncate,
         season,
         category,
         popular,
       ]) => {
-        // 4桁ゼロ埋め＋サニタイズ名
+        // 4桁ゼロ埋め
         const fileName = `${String(id).padStart(4, "0")}_${name}`;
 
         return {
@@ -164,7 +164,7 @@ function parseMotifData(csvArray) {
           motifName: name || "-",
           planeNum: num || "-",
           droneType: droneType || "-",
-          fileName, // ←生成したファイル名
+          fileName,
           height: h || "-",
           width: w || "-",
           depth: d || "-",

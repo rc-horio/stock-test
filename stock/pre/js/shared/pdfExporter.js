@@ -8,7 +8,6 @@ export class PDFExporter {
   }
 
   /* ---------- CSV からメタデータを取得 (1回だけ) ---------- */
-  /* ---------- CSV からメタデータを取得 (1回だけ) ---------- */
   async #ensureMotifMap() {
     if (this.motifMap) return this.motifMap; // キャッシュあり
 
@@ -28,9 +27,8 @@ export class PDFExporter {
         w,
         d,
         len,
-        _skip, // 8列目（切捨て）は無視
+        _skip, 
       ]) => {
-        // ← 新フォーマットでは File 列が無いので自前で生成
         const file = `${String(id).padStart(4, "0")}_${name}`;
 
         this.motifMap.set(file, {

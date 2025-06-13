@@ -8,6 +8,7 @@ export class PDFExporter {
   }
 
   /* ---------- CSV からメタデータを取得 (1回だけ) ---------- */
+  /* ---------- CSV からメタデータを取得 (1回だけ) ---------- */
   async #ensureMotifMap() {
     if (this.motifMap) return this.motifMap; // キャッシュあり
 
@@ -16,16 +17,32 @@ export class PDFExporter {
     const rows = parseCSV(text).slice(1); // ヘッダ除去
 
     this.motifMap = new Map();
-    rows.forEach(([id, name, num, comment, file, w, h, d, len]) => {
-      if (!file) return; // file がキーになる
-      this.motifMap.set(file, {
-        planeNum: num || "-",
-        width: w || "-",
-        height: h || "-",
-        depth: d || "-",
-        length: len || "-",
-      });
-    });
+
+    rows.forEach(
+      ([
+        id,
+        name,
+        num,
+        _comment,
+        h,
+        w,
+        d,
+        len,
+        _skip, // 8列目（切捨て）は無視
+      ]) => {
+        // ← 新フォーマットでは File 列が無いので自前で生成
+        const file = `${String(id).padStart(4, "0")}_${name}`;
+
+        this.motifMap.set(file, {
+          planeNum: num || "-",
+          width: w || "-",
+          height: h || "-",
+          depth: d || "-",
+          length: len || "-",
+        });
+      }
+    );
+
     return this.motifMap;
   }
 

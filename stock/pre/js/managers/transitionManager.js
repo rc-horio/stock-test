@@ -7,7 +7,7 @@ let transitionList = [];
 export function setTransitionData(csvArray) {
   const [, ...rows] = csvArray;
   transitionList = rows
-    .map(([id, name, comment, filename]) => ({ id, name, comment, filename }))
+    .map(([id, name, droneType, filename]) => ({ id, name, droneType, filename }))
     .filter((t) => t.id);
 }
 

@@ -103,7 +103,7 @@ export function buildMotifList(csvArray, container) {
                     data-depth="${m.depth}" data-length="${m.length}" 
                     alt="${m.fileName}">
               </a>
-              <p>${m.motifName} / ${m.planeNum}機 / ${m.comment}</p>
+              <p>${m.motifName} / ${m.planeNum}機 / ${m.droneType}</p>
             </div>
           </div>`;
 
@@ -119,7 +119,7 @@ export function buildMotifList(csvArray, container) {
 
         openSharedModal({
           videoPath,
-          comment: "",
+          droneType: "",
           infoText: info,
           selectData: null,
           onInput: () => addMotifToFooter(m.fileName),
@@ -146,41 +146,43 @@ function parseMotifData(csvArray) {
         id,
         name,
         num,
-        comment,
-        file,
+        droneType,
         h,
         w,
         d,
         len,
-        ,
+        _truncate, // 8列目は無視
         season,
         category,
         popular,
-      ]) => ({
-        id: id || "-",
-        motifName: name || "-",
-        planeNum: num || "-",
-        comment: comment || "-",
-        fileName: file || "-",
-        height: h || "-",
-        width: w || "-",
-        depth: d || "-",
-        length: len || "-",
-        season: season || "-",
-        category: category || "-",
-        popular: popular || "-",
-      })
-    )
+      ]) => {
+        // 4桁ゼロ埋め＋サニタイズ名
+        const fileName = `${String(id).padStart(4, "0")}_${name}`;
 
+        return {
+          id: id || "-",
+          motifName: name || "-",
+          planeNum: num || "-",
+          droneType: droneType || "-",
+          fileName, // ←生成したファイル名
+          height: h || "-",
+          width: w || "-",
+          depth: d || "-",
+          length: len || "-",
+          season: season || "-",
+          category: category || "-",
+          popular: popular || "-",
+        };
+      }
+    )
     .filter((m) => {
       const values = Object.values(m);
-      const allEmpty = values.every((val) => val === "-");
+      const allEmpty = values.every((v) => v === "-");
       const onlyIdExists =
-        m.id !== "-" && values.slice(1).every((val) => val === "-");
+        m.id !== "-" && values.slice(1).every((v) => v === "-");
       return !(allEmpty || onlyIdExists);
     });
 }
-
 export const getMotifData = () => internalMotifData;
 
 /* ================================================================

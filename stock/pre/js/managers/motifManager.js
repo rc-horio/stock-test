@@ -85,6 +85,15 @@ export function buildMotifList(csvArray, container) {
     img.onload = () => {
       const section = document.createElement("section");
       section.className = `m_${m.planeNum} m_${group100}`;
+      if (m.season && m.season !== "-") {
+        section.classList.add(`season_${m.season}`);
+      }
+      if (m.category && m.category !== "-") {
+        section.classList.add(`category_${m.category}`);
+      }
+      if (m.popular && m.popular !== "-") {
+        section.classList.add(`popular_${m.popular}`);
+      }
       section.innerHTML = `
           <div class="singleArray">
             <div class="box-img">
@@ -132,17 +141,37 @@ export function buildMotifList(csvArray, container) {
 function parseMotifData(csvArray) {
   const [, ...rows] = csvArray;
   return rows
-    .map(([id, name, num, comment, file, h, w, d, len]) => ({
-      id: id || "-",
-      motifName: name || "-",
-      planeNum: num || "-",
-      comment: comment || "-",
-      fileName: file || "-",
-      height: h || "-",
-      width: w || "-",
-      depth: d || "-",
-      length: len || "-",
-    }))
+    .map(
+      ([
+        id,
+        name,
+        num,
+        comment,
+        file,
+        h,
+        w,
+        d,
+        len,
+        ,
+        season,
+        category,
+        popular,
+      ]) => ({
+        id: id || "-",
+        motifName: name || "-",
+        planeNum: num || "-",
+        comment: comment || "-",
+        fileName: file || "-",
+        height: h || "-",
+        width: w || "-",
+        depth: d || "-",
+        length: len || "-",
+        season: season || "-",
+        category: category || "-",
+        popular: popular || "-",
+      })
+    )
+
     .filter((m) => {
       const values = Object.values(m);
       const allEmpty = values.every((val) => val === "-");

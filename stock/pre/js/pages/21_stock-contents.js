@@ -57,25 +57,112 @@ function showMainUI() {
   }
 }
 
-// --------------------
-// 機体数フィルタの設定
-// --------------------
-function setupPlaneFilter() {
-  const select = document.getElementById("select");
+/* --------------------
+   階層型メニュー クリック式フィルタ
+-------------------- */
+function setupCascadingFilter() {
+  const menu = document.getElementById("filterMenu");
 
-  // 「All」の value は 0000 としている前提
-  select.addEventListener("change", () => {
-    const val = select.value; // 例 "0100"
-    const targetClass = `m_${Number(val)}`; // → "m_100"
+  // ------ クリック / Enter / Space ------
+  menu.addEventListener("click", handleSelect);
+  menu.addEventListener("keyup", (e) => {
+    if (e.key === "Enter" || e.key === " ") handleSelect(e);
+  });
 
-    // すべての motif セクションを走査して表示／非表示を決定
-    document.querySelectorAll("#setGrid > section").forEach((sec) => {
-      if (val === "0000" || sec.classList.contains(targetClass)) {
-        sec.removeAttribute("id"); // 表示
-      } else {
-        sec.setAttribute("id", "m_none"); // 非表示
-      }
-    });
+  // ------ メニュー外をクリックしたら全て閉じる ------
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target)) {
+      menu
+        .querySelectorAll(".open")
+        .forEach((li) => li.classList.remove("open"));
+    }
+  });
+
+  function handleSelect(e) {
+    const li = e.target.closest("li");
+    if (!li) return;
+
+    // ▼ サブメニューを持つ項目（root / has-sub）は開閉トグルだけ
+    if (li.classList.contains("root") || li.classList.contains("has-sub")) {
+      li.classList.toggle("open");
+      e.stopPropagation();
+      e.preventDefault();
+      return;
+    }
+
+    // ▼ データ属性がある＝フィルタ対象の「葉」項目
+    const { type, value } = li.dataset;
+    if (!type) return;
+
+    switch (type) {
+      case "planes":
+        filterByPlanes(value); // 例：「100機」クリック
+        break;
+      case "season":
+        filterBySeason(value);
+        break;
+      case "category":
+        filterByCategory(value);
+        break;
+      case "popular":
+        filterByPopular(value);
+        break;
+    }
+
+    // クリック後にメニューを閉じたい場合はここで open クラスを除去
+    menu.querySelectorAll(".open").forEach((n) => n.classList.remove("open"));
+
+    e.stopPropagation();
+    e.preventDefault();
+  }
+}
+
+/* --- 機体数フィルタ --- */
+function filterByPlanes(val) {
+  resetVisibility();
+  const targetClass = `m_${Number(val)}`; // "m_100" 等
+
+  document.querySelectorAll("#setGrid > section").forEach((sec) => {
+    if (val === "0000" || sec.classList.contains(targetClass)) {
+      sec.removeAttribute("id"); // 表示
+    } else {
+      sec.setAttribute("id", "m_none"); // 非表示
+    }
+  });
+}
+
+/* --- 季節フィルタ --- */
+function filterBySeason(season) {
+  resetVisibility();
+  document.querySelectorAll("#setGrid > section").forEach((sec) => {
+    const show = sec.classList.contains(`season_${season}`);
+    if (!show) sec.style.display = "none";
+  });
+}
+
+/* --- カテゴリーフィルタ --- */
+function filterByCategory(category) {
+  resetVisibility();
+  document.querySelectorAll("#setGrid > section").forEach((sec) => {
+    const show = sec.classList.contains(`category_${category}`);
+    if (!show) sec.style.display = "none";
+  });
+}
+
+/* --- 人気順フィルタ --- */
+function filterByPopular(pop) {
+  resetVisibility();
+  document.querySelectorAll("#setGrid > pop").forEach((sec) => {
+    const show = sec.classList.contains(`pop_${pop}`);
+    if (!show) sec.style.display = "none";
+  });
+}
+
+// フィルタリングリセット
+function resetVisibility() {
+  document.querySelectorAll("#setGrid > section").forEach((sec) => {
+    sec.removeAttribute("id"); // m_none を外す
+    sec.style.display = ""; // display を戻す
   });
 }
 
@@ -124,24 +211,22 @@ function initializeMainApp() {
 
   // モチーフデータの読み込み（★ローカルファイルから取得）
   loadCSV("./assets/csv/motifs.csv", (text) => {
-
-  // モチーフデータの読み込み（★R2 から取得）
-  // loadCSV(`${CDN_BASE}/assets/csv/motifs.csv`, (text) => {
+    // モチーフデータの読み込み（★R2 から取得）
+    // loadCSV(`${CDN_BASE}/assets/csv/motifs.csv`, (text) => {
     const csvArray = parseCSV(text);
     buildMotifList(csvArray, colorList);
   });
 
   // トランジションデータの読み込み（★ローカルファイルから取得）
   loadCSV("./assets/csv/transitions.csv", (text) => {
-
-  // トランジションデータの読み込み（★R2 から取得）
-  // loadCSV(`${CDN_BASE}/assets/csv/transitions.csv`, (text) => {
+    // トランジションデータの読み込み（★R2 から取得）
+    // loadCSV(`${CDN_BASE}/assets/csv/transitions.csv`, (text) => {
     const transitionCsvArray = parseCSV(text);
     setTransitionData(transitionCsvArray);
   });
 
-  // 機体数フィルタ設定
-  setupPlaneFilter();
+  // 階層型メニューのイベント登録
+  setupCascadingFilter();
 
   // PDF出力ボタン設定
   const pdfExporter = new PDFExporter("#footerItem");

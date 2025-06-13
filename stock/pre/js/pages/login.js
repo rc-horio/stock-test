@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = loginForm.password.value.trim();
 
     // ユーザー認証
-    if (username === "test" && password === "test") {
+    if (username === "test" && password === "testredcliff") {
       sessionStorage.setItem("isLoggedIn", "true");
       sessionStorage.setItem("userRole", "user");
       window.location.href = "20_user-menu.html";

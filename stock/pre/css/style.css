@@ -1,3 +1,91 @@
+/* ====================================================
+  【階層構造】
+  - 階層①: カテゴリメニュー本体          （.cascading-menu）
+  - 階層②: 「機体数」「季節」などカテゴリ項目 （.cascading-menu > ul > li > ul > li）
+  - 階層③: 「100機」「200機」など選択肢    （.cascading-menu > ul > li > ul > li > ul > li）
+==================================================== */
+
+/* 共通：全体リストリセット */
+.cascading-menu,
+.cascading-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* 最上位カテゴリリスト（例：カテゴリー） */
+.cascading-menu>ul>li {
+    position: relative;
+    background-color: #333;
+    color: #fff;
+    padding: 8px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* ★★ 第2階層：機体数・季節など（右に展開） ★★ */
+.cascading-menu>ul>li>ul {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    /* ←右に展開 */
+    background-color: #444;
+    min-width: 160px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+/* ★★ 第3階層：100機、200機など（さらに右に展開） ★★ */
+.cascading-menu>ul>li>ul>li>ul {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    /* ←さらに右に展開 */
+    background-color: #555;
+    min-width: 160px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    z-index: 1100;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+/* 表示用：.open クラスがついた時に表示 */
+.cascading-menu li.open>ul {
+    display: block;
+}
+
+/* 各リスト項目共通スタイル */
+.cascading-menu li ul li {
+    padding: 8px 12px;
+    color: #fff;
+    background-color: inherit;
+    line-height: 1.5;
+    min-height: 36px;
+    box-sizing: border-box;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* hover効果 */
+.cascading-menu li:hover {
+    background-color: #555;
+}
+
+.cascading-menu li ul li:hover {
+    background-color: #666;
+}
+
+.cascading-menu li ul li:active {
+    background-color: #777;
+}
+
+.cascading-menu li.has-sub.open>ul,
+.cascading-menu li.has-sub>ul>li.has-sub.open>ul {
+    display: block;
+}
+
 /* =========================================
    共通部品
 ========================================= */

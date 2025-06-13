@@ -27,22 +27,60 @@
         <div class="headpos" id="subtitle">ストックコンテンツ</div>
     </div>
     <div id="headBotom">
-        <div id="hb_title">機体数</div>
-        <select name="sample" id="select">
-            <option value="0000">All</option>
-            <option value="0100">100機</option>
-            <option value="0200">200機</option>
-            <option value="0300">300機</option>
-            <option value="0400">400機</option>
-            <option value="0500">500機</option>
-            <option value="0600">600機</option>
-            <option value="0700">700機</option>
-            <option value="0800">800機</option>
-            <option value="0900">900機</option>
-            <option value="1000">1000機</option>
-            <option value="1100">1100機</option>
-            <option value="1200">1200機</option>
-        </select>
+
+        <nav id="filterMenu" class="cascading-menu">
+            <ul>
+                <li class="root has-sub">フィルター
+                    <ul>
+
+                        <li class="has-sub">機体数
+                            <ul>
+                                <li data-type="planes" data-value="0000">すべて表示</li>
+                                <li data-type="planes" data-value="0100">100機</li>
+                                <li data-type="planes" data-value="0200">200機</li>
+                                <li data-type="planes" data-value="0300">300機</li>
+                                <li data-type="planes" data-value="0400">400機</li>
+                                <li data-type="planes" data-value="0500">500機</li>
+                                <li data-type="planes" data-value="0600">600機</li>
+                                <li data-type="planes" data-value="0700">700機</li>
+                                <li data-type="planes" data-value="0800">800機</li>
+                                <li data-type="planes" data-value="0900">900機</li>
+                                <li data-type="planes" data-value="1000">1000機</li>
+                                <li data-type="planes" data-value="1100">1100機</li>
+                                <li data-type="planes" data-value="1200">1200機</li>
+                            </ul>
+                        </li>
+
+                        <li class="has-sub">季節
+                            <ul>
+                                <li data-type="planes" data-value="0000">すべて表示</li>
+                                <li data-type="season" data-value="spring">春</li>
+                                <li data-type="season" data-value="summer">夏</li>
+                                <li data-type="season" data-value="autumn">秋</li>
+                                <li data-type="season" data-value="winter">冬</li>
+                            </ul>
+                        </li>
+
+                        <li class="has-sub">カテゴリー
+                            <ul>
+                                <li data-type="planes" data-value="0000">すべて表示</li>
+                                <li data-type="category" data-value="food">食べ物</li>
+                                <li data-type="category" data-value="animal">動物</li>
+                                <li data-type="category" data-value="insect">虫</li>
+                                <li data-type="category" data-value="plant">植物</li>
+                                <li data-type="category" data-value="building">建物</li>
+                                <li data-type="category" data-value="nature">自然</li>
+                                <li data-type="category" data-value="text">文字</li>
+                                <li data-type="category" data-value="symbol">記号</li>
+                            </ul>
+                        </li>
+                        
+                        <li data-type="planes" data-value="0000">人気</li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
     </div>
 </header>
 

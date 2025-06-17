@@ -21,18 +21,18 @@ export class PDFExporter {
       ([
         id,
         name,
-        num,
-        _comment,
+        _num,
+        droneType,
         h,
         w,
         d,
         len,
-        _skip, 
+        truncate, 
       ]) => {
         const file = `${String(id).padStart(4, "0")}_${name}`;
 
         this.motifMap.set(file, {
-          planeNum: num || "-",
+          planeNum: truncate || "-",
           width: w || "-",
           height: h || "-",
           depth: d || "-",

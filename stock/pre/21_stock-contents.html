@@ -2,6 +2,19 @@
 <html lang="ja">
 
 <head>
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-PLM9H87Z');
+    </script>
+    <!-- End Google Tag Manager -->
+
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -82,77 +95,85 @@
     </div>
 </header>
 
-<!-- メインコンテンツ -->
-<div class="mainArray">
-    <div id="setGrid">
-        <div id="color_list"></div>
-    </div>
-</div>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PLM9H87Z" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
-<!-- 共通モーダル -->
-<div id="sharedModalMask" class="hidden"></div>
-<section id="sharedModal" class="hidden">
-    <div class="sharedModalHeader">
-        <div id="sharedModalClose">&times;</div>
+    <!-- メインコンテンツ -->
+    <div class="mainArray">
+        <div id="setGrid">
+            <div id="color_list"></div>
+        </div>
     </div>
 
-    <div class="sharedModalBody">
-        <!-- 切り替え可能なセクション: select, video, info -->
-        <div id="sharedModalSelectWrapper" class="hidden">
-            <select id="sharedModalSelect"></select>
+    <!-- 共通モーダル -->
+    <div id="sharedModalMask" class="hidden"></div>
+    <section id="sharedModal" class="hidden">
+        <div class="sharedModalHeader">
+            <div id="sharedModalClose">&times;</div>
         </div>
 
-        <div class="sharedVideoContainer">
-            <video id="sharedVideo" autoplay muted loop>
-                <source src="" type="video/mp4" id="sharedVideoSource" />
-            </video>
-            <div id="sharedComment"></div>
+        <div class="sharedModalBody">
+            <!-- 切り替え可能なセクション: select, video, info -->
+            <div id="sharedModalSelectWrapper" class="hidden">
+                <select id="sharedModalSelect"></select>
+            </div>
+
+            <div class="sharedVideoContainer">
+                <video id="sharedVideo" autoplay muted loop>
+                    <source src="" type="video/mp4" id="sharedVideoSource" />
+                </video>
+                <div id="sharedComment"></div>
+            </div>
+
         </div>
 
+        <div class="sharedModalFooter">
+            <div id="sharedInfoText"></div>
+            <div id="sharedModalInput">＋フッターに追加</div>
+        </div>
+    </section>
+
+    <!-- トランジション選択モーダル -->
+    <div id="transitionModalMask" class="hidden"></div>
+    <section id="transitionModal" class="hidden">
+        <div class="transitionModalHeader">
+            <div id="transitionModalClose">&times;</div>
+        </div>
+
+        <h3 class="transitionModalHeading">トランジションを選択してください</h3>
+
+        <div id="transitionGrid" class="transitionModalBody">
+            <!-- トランジションカードがここに入る -->
+        </div>
+    </section>
+
+    <!-- ★★ TL（離陸／着陸）選択モーダル -->
+    <div id="tlModalMask" class="hidden"></div>
+    <section id="tlModal" class="hidden">
+        <div class="transitionModalHeader">
+            <div id="tlModalClose">&times;</div>
+        </div>
+
+        <h3 id="tlModalHeading" style="color:#fff;text-align:center;margin:6px 0;"></h3>
+
+        <div id="tlGrid" class="tlModalBody">
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <div id="footerPanel">
+        <div id="footerToggle">▼ フッターを非表示</div>
+        <div id="footertitle">
+            <div id="PDFoutput">PDF 出力</div>
+        </div>
+        <div id="footerItem"></div>
     </div>
-
-    <div class="sharedModalFooter">
-        <div id="sharedInfoText"></div>
-        <div id="sharedModalInput">＋フッターに追加</div>
-    </div>
-</section>
-
-<!-- トランジション選択モーダル -->
-<div id="transitionModalMask" class="hidden"></div>
-<section id="transitionModal" class="hidden">
-    <div class="transitionModalHeader">
-        <div id="transitionModalClose">&times;</div>
-    </div>
-
-    <h3 class="transitionModalHeading">トランジションを選択してください</h3>
-
-    <div id="transitionGrid" class="transitionModalBody">
-        <!-- トランジションカードがここに入る -->
-    </div>
-</section>
-
-<!-- ★★ TL（離陸／着陸）選択モーダル -->
-<div id="tlModalMask" class="hidden"></div>
-<section id="tlModal" class="hidden">
-    <div class="transitionModalHeader">
-        <div id="tlModalClose">&times;</div>
-    </div>
-
-    <h3 id="tlModalHeading" style="color:#fff;text-align:center;margin:6px 0;"></h3>
-
-    <div id="tlGrid" class="tlModalBody">
-    </div>
-</section>
-
-<!-- フッター -->
-<div id="footerPanel">
-    <div id="footerToggle">▼ フッターを非表示</div>
-    <div id="footertitle">
-        <div id="PDFoutput">PDF 出力</div>
-    </div>
-    <div id="footerItem"></div>
-</div>
-
+</body>
 <!-- スクリプト -->
 <script type="module" src="./js/\\/pages/21_stock-contents.js"></script>
 <script type="module" src="./js/shared/feedback.js"></script>

@@ -108,7 +108,7 @@ function replacePlaceholder(placeholder, { name, file }, tlType) {
     // 画像アイコン
     placeholder.innerHTML = `
       <div class="container tlPlainText"
-           data-type="${tlType}" data-filename="">
+           data-type="${tlType}" data-filename="レインボー">
         レインボー
       </div>
       <div class="footerItemClose tlCancel">Cancel</div>

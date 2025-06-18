@@ -17,29 +17,17 @@ export class PDFExporter {
 
     this.motifMap = new Map();
 
-    rows.forEach(
-      ([
-        id,
-        name,
-        _num,
-        droneType,
-        h,
-        w,
-        d,
-        len,
-        truncate, 
-      ]) => {
-        const file = `${String(id).padStart(4, "0")}_${name}`;
+    rows.forEach(([id, name, _num, droneType, h, w, d, len, truncate]) => {
+      const file = `${String(id).padStart(4, "0")}_${name}`;
 
-        this.motifMap.set(file, {
-          planeNum: truncate || "-",
-          width: w || "-",
-          height: h || "-",
-          depth: d || "-",
-          length: len || "-",
-        });
-      }
-    );
+      this.motifMap.set(file, {
+        planeNum: truncate || "-",
+        width: w || "-",
+        height: h || "-",
+        depth: d || "-",
+        length: len || "-",
+      });
+    });
 
     return this.motifMap;
   }
@@ -68,6 +56,9 @@ export class PDFExporter {
 
     let takeoffTitle = "";
     let landingTitle = "";
+
+    // 選ばれたモチーフのファイル名を配列で収集
+    const picked = [];
 
     // 画像（motif・transition）だけ
     const imgs = [...this.container.querySelectorAll("img")];
@@ -118,6 +109,8 @@ export class PDFExporter {
         continue;
       }
 
+      picked.push(img.dataset.filename);
+
       /* ─── モチーフ ─── */
       motifIndex++;
       const dataURL = await this.#imgToDataURL(img);
@@ -141,7 +134,7 @@ export class PDFExporter {
         <div class="entry">
           <div class="entry-number">${motifIndex}</div>
           <div class="entry-content">
-            <img src="${dataURL}" class="motif-img">
+            <img src="${dataURL}" class="motif-img" data-filename="${fileName}" data-type="motif">
               <div class="caption caption-side">
                 <div class="caption-line title">${fileName}</div>
                 <div class="caption-line">機体数　${planes} 機</div>
@@ -161,6 +154,13 @@ export class PDFExporter {
         entries.push(landingLabelHTML);
       }
     }
+
+    /* =========dataLayer に 1 回だけ push ========= */
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "pdf_generated",
+      motif_files: Array.from(new Set(picked)), // 重複を除いた配列
+    });
 
     /* ========= 2) 左右カラムに分割 ========== */
     const MAX_PER_COLUMN = 6;

@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("contextmenu", (e) => e.preventDefault());
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I")) {
+      e.preventDefault();
+    }
+  });
   const loginForm = document.getElementById("loginForm");
   const loginError = document.getElementById("loginError");
 

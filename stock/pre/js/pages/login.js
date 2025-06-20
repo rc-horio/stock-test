@@ -14,11 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = loginForm.password.value.trim();
     const hashedPassword = sha256(password);
 
-    console.log(hashedPassword)
-
     // ユーザー認証
     if (credentials[username] && credentials[username] === hashedPassword) {
-      console.log(hashedPassword)
       sessionStorage.setItem("isLoggedIn", "true");
       sessionStorage.setItem(
         "userRole",
@@ -28,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href =
         username === "admin" ? "10_admin-menu.html" : "20_user-menu.html";
     } else {
-      console.log(hashedPassword)
       loginError.textContent = "ユーザー名またはパスワードが正しくありません。";
       loginError.classList.add("show");
     }

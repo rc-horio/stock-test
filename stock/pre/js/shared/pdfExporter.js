@@ -17,7 +17,7 @@ export class PDFExporter {
 
     this.motifMap = new Map();
 
-    rows.forEach(([id, name, _num, droneType, h, w, d, len, truncate]) => {
+    rows.forEach(([id, date, name, _num, droneType, h, w, d, len, truncate]) => {
       const file = `${String(id).padStart(4, "0")}_${name}`;
 
       this.motifMap.set(file, {

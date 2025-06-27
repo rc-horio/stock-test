@@ -86,6 +86,24 @@
     display: block;
 }
 
+.cascading-menu li.selected {
+    background: #6e6d6d;
+}
+
+/* リセットボタン */
+.menu-reset-btn {
+    margin-left: 8px;
+    padding: 4px 12px;
+    background: #444;
+    color: #fff;
+    border: 1px solid #666;
+    cursor: pointer;
+}
+
+.menu-reset-btn:hover {
+    background: #555;
+}
+
 /* =========================================
    共通部品
 ========================================= */
@@ -434,7 +452,6 @@ select {
     margin: 0;
     position: absolute;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
 }
 
 /* フィルタリングで非表示にするクラス */
@@ -513,6 +530,8 @@ select {
     cursor: pointer;
     color: #fff;
     font-size: clamp(14px, 2vw, 18px);
+    margin-top: 8px;
+    margin-right: 10px
 }
 
 #sharedModalClose:hover,

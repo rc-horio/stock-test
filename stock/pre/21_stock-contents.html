@@ -41,6 +41,7 @@
     </div>
     <div id="headBotom">
 
+        <!-- フィルタリングメニュー -->
         <nav id="filterMenu" class="cascading-menu">
             <ul>
                 <li class="root has-sub">フィルター
@@ -91,6 +92,23 @@
                 </li>
             </ul>
         </nav>
+
+        <!-- ソートメニュー -->
+        <nav id="sortMenu" class="cascading-menu">
+            <ul>
+                <li class="root has-sub">並び替え
+                    <ul>
+                        <li data-sort="planesAsc">機体数（少 → 多）</li>
+                        <li data-sort="planesDesc">機体数（多 → 少）</li>
+                        <li data-sort="dateAsc">古い順</li>
+                        <li data-sort="dateDesc">新しい順</li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- リセットボタン -->
+        <button id="resetMenusBtn" class="menu-reset-btn">リセット</button>
 
     </div>
 </header>

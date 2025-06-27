@@ -1,10 +1,14 @@
 import { openTransitionModal } from "./transitionManager.js";
 import { openSharedModal } from "../shared/sharedModal.js";
-import { CDN_BASE } from "../shared/util.js";
 import { flashElement } from "../shared/feedback.js";
 
 let footerItemRef = null;
 let internalMotifData = [];
+let originalOrder = [];
+// 現在の並び替え状態
+let currentSortKey = "";
+// 読み込んだ画像枚数
+let loadedCount = 0;
 
 /* ================================================================
    フッターにドラッグ＆ドロップ（Swap）を設定
@@ -62,11 +66,20 @@ function clearHighlight() {
   lastHighlight = null;
 }
 
+/* ---------- 日付を ISO にしてタイムスタンプ取得 ---------- */
+function toTimestamp(str) {
+  if (!str || str === "-") return 0;
+  const iso = str.replace(/\//g, "-");
+  const t = Date.parse(iso);
+  return Number.isFinite(t) ? t : 0;
+}
+
 /* ================================================================
    Motif 一覧を生成（グリッド側）
    ================================================================= */
 export function buildMotifList(csvArray, container) {
   internalMotifData = parseMotifData(csvArray);
+  originalOrder = [...internalMotifData];
 
   internalMotifData.forEach((m) => {
     // モチーフ画像の読み込み（★ローカルファイルから取得）
@@ -84,7 +97,12 @@ export function buildMotifList(csvArray, container) {
 
     img.onload = () => {
       const section = document.createElement("section");
+      // 画像ロード完了をカウントし、全件そろったら再ソート
+      loadedCount++;
+      if (loadedCount === internalMotifData.length && currentSortKey)
+        sortMotifs(currentSortKey);
       section.className = `m_${m.planeNum} m_${group100}`;
+
       if (m.season && m.season !== "-") {
         section.classList.add(`season_${m.season}`);
       }
@@ -107,6 +125,7 @@ export function buildMotifList(csvArray, container) {
             </div>
           </div>`;
 
+      m.el = section;
       section.querySelector("a").addEventListener("click", (e) => {
         const img = e.target;
         // モチーフ動画の読み込み（★ローカルファイルから取得）
@@ -131,6 +150,9 @@ export function buildMotifList(csvArray, container) {
 
     img.onerror = () => {
       console.warn(`画像が見つかりません: ${imgPath}`);
+      loadedCount++;
+      if (loadedCount === internalMotifData.length && currentSortKey)
+        sortMotifs(currentSortKey);
     };
   });
 }
@@ -144,6 +166,7 @@ function parseMotifData(csvArray) {
     .map(
       ([
         id,
+        date,
         name,
         _num,
         droneType,
@@ -161,6 +184,7 @@ function parseMotifData(csvArray) {
 
         return {
           id: id || "-",
+          dateValue: toTimestamp(date),
           motifName: name || "-",
           planeNum: truncate || "-",
           droneType: droneType || "-",
@@ -205,13 +229,6 @@ export function cancelMotif(motifEl) {
 export function createMotifElement(fileName) {
   const div = document.createElement("div");
   div.className = "footerIcon motifIcon";
-
-  // （★ローカルファイルから取得する）
-  // <img src="./assets/image/motif/icon/${fileName}.jpg"
-
-  // （★R3から取得）
-  // <img src="${CDN_BASE}/assets/image/motif/icon/${fileName}.jpg"
-
   div.innerHTML = `
     <img src="./assets/image/motif/icon/${fileName}.jpg"
          class="container"
@@ -251,4 +268,61 @@ function rebuildPlusButtons() {
     }
     node.after(createDividerPlus());
   });
+}
+
+/* ================================================================
+   ソート（外部から呼び出し）
+   ================================================================= */
+function toInt(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0; // "-" や "" は 0 扱い
+}
+
+export function sortMotifs(order) {
+  currentSortKey = order;
+  if (!internalMotifData.length) return;
+
+  const sorted = [...internalMotifData].sort((a, b) => {
+    const nA = toInt(a.planeNum);
+    const nB = toInt(b.planeNum);
+
+    switch (order) {
+      case "planesAsc":
+        return nA - nB;
+      case "planesDesc":
+        return nB - nA;
+      case "dateAsc":
+        return a.dateValue - b.dateValue;
+      case "dateDesc":
+        return b.dateValue - a.dateValue;
+      default:
+        return 0;
+    }
+  });
+
+  const grid = document.getElementById("setGrid");
+  sorted.forEach((m) => m.el && grid.appendChild(m.el));
+
+  const colorList = document.getElementById("color_list");
+  colorList && grid.appendChild(colorList);
+}
+
+/* ================================================================
+   フィルター＋並び替え リセット
+   ================================================================= */
+export function resetMenus() {
+  /* 1) ハイライト解除 */
+  document
+    .querySelectorAll("#filterMenu li.selected,#sortMenu li.selected")
+    .forEach((li) => li.classList.remove("selected"));
+
+  /* 2) フィルター解除 */
+  if (typeof resetVisibility === "function") resetVisibility();
+
+  /* 3) 並び替え解除（初期 DOM 順に戻す） */
+  currentSortKey = "";
+  const grid = document.getElementById("setGrid");
+  originalOrder.forEach((m) => m.el && grid.appendChild(m.el));
+  const colorList = document.getElementById("color_list");
+  colorList && grid.appendChild(colorList);
 }

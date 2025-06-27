@@ -3,6 +3,8 @@ import {
   buildMotifList,
   setFooterItem,
   cancelMotif,
+  sortMotifs,
+  resetMenus,
 } from "../managers/motifManager.js";
 import {
   setTransitionData,
@@ -84,6 +86,11 @@ function setupCascadingFilter() {
 
     // ▼ サブメニューを持つ項目（root / has-sub）は開閉トグルだけ
     if (li.classList.contains("root") || li.classList.contains("has-sub")) {
+      // 並び替えメニューを全部閉じる
+      document
+        .querySelectorAll("#sortMenu .open")
+        .forEach((n) => n.classList.remove("open"));
+
       // 同じ階層にある兄弟の open を全て除去
       const siblings = li.parentElement.querySelectorAll(
         ":scope > li.has-sub.open"
@@ -102,6 +109,12 @@ function setupCascadingFilter() {
     // ▼ データ属性がある＝フィルタ対象の「葉」項目
     const { type, value } = li.dataset;
     if (!type) return;
+
+    menu
+      .querySelectorAll(`li[data-type="${type}"].selected`)
+      .forEach((n) => n.classList.remove("selected"));
+    // ② 今回クリックした項目を選択状態に
+    li.classList.add("selected");
 
     switch (type) {
       case "planes":
@@ -175,6 +188,68 @@ function resetVisibility() {
   });
 }
 
+window.resetVisibility = resetVisibility;
+
+/* ----------------------------------
+   ソート
+---------------------------------- */
+function setupSortMenu() {
+  const menu = document.getElementById("sortMenu");
+  if (!menu) return;
+
+  // クリック／Enter／Space
+  menu.addEventListener("click", handleSelect);
+  menu.addEventListener("keyup", (e) => {
+    if (e.key === "Enter" || e.key === " ") handleSelect(e);
+  });
+
+  // メニュー外クリックで閉じる
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target))
+      menu
+        .querySelectorAll(".open")
+        .forEach((li) => li.classList.remove("open"));
+  });
+
+  function handleSelect(e) {
+    const li = e.target.closest("li");
+    if (!li) return;
+
+    // ▼ サブメニュー開閉
+    if (li.classList.contains("root") || li.classList.contains("has-sub")) {
+      // フィルターメニューを全部閉じる
+      document
+        .querySelectorAll("#filterMenu .open")
+        .forEach((n) => n.classList.remove("open"));
+
+      // 同階層の open を閉じる
+      li.parentElement
+        .querySelectorAll(":scope > li.has-sub.open")
+        .forEach((sib) => sib !== li && sib.classList.remove("open"));
+      li.classList.toggle("open");
+      e.stopPropagation();
+      e.preventDefault();
+      return;
+    }
+
+    // 既存の選択をすべて解除
+    menu
+      .querySelectorAll("li[data-sort].selected")
+      .forEach((n) => n.classList.remove("selected"));
+    // 今回クリックした項目をハイライト
+    li.classList.add("selected");
+
+    // ▼ 並び替え実行
+    const sortKey = li.dataset.sort;
+    if (sortKey) sortMotifs(sortKey);
+
+    // クリック後にメニューを閉じる
+    menu.querySelectorAll(".open").forEach((n) => n.classList.remove("open"));
+    e.stopPropagation();
+    e.preventDefault();
+  }
+}
+
 // --------------------
 // キャンセル処理（Motif/Transition）
 // --------------------
@@ -242,4 +317,9 @@ function initializeMainApp() {
   pdfOutputBtn.addEventListener("click", () => {
     pdfExporter.export();
   });
+  // ソートメニューを有効化
+  setupSortMenu();
+  document
+    .getElementById("resetMenusBtn")
+    .addEventListener("click", resetMenus);
 }

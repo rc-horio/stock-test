@@ -25,7 +25,7 @@ function closeExistingPanels() {
   const tlMask = document.getElementById("tlModalMask");
   if (tlMask && !tlMask.classList.contains("hidden")) tlMask.click();
 
-  const sharedMask = document.getElementById("sharedModalMask");
+  const sharedMask = document.getElementById("motifModalMask");
   if (sharedMask && !sharedMask.classList.contains("hidden"))
     sharedMask.click();
 }

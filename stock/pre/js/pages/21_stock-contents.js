@@ -21,7 +21,7 @@ import {
 // --------------------
 const footerItem = document.getElementById("footerItem");
 const pdfOutputBtn = document.getElementById("PDFoutput");
-const sharedModalSelect = document.getElementById("sharedModalSelect");
+const motifModalSelect = document.getElementById("motifModalSelect");
 const select = document.getElementById("select");
 const colorList = document.getElementById("color_list");
 

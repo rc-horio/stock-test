@@ -42,7 +42,7 @@ function createPlaceholder(type, attachClick = true) {
 /* -------------------- モーダル -------------------- */
 function openTlModal(targetPlaceholder, type) {
   // 既存パネルを閉じる（Transition / Shared）
-  ["transitionModalMask", "sharedModalMask"].forEach((id) => {
+  ["transitionModalMask", "motifModalMask"].forEach((id) => {
     const mask = document.getElementById(id);
     if (mask && !mask.classList.contains("hidden")) mask.click();
   });
